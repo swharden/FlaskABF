@@ -11,6 +11,8 @@ Methods in this file read/write cells notes files.
 """
 
 import os
+import shutil
+import time
 
 COLORCODES = {
     "": "#FFFFFF",
@@ -29,7 +31,7 @@ COLORCODES = {
 
 
 class CellNote:
-    def __init__(self, abfID, colorCode = "", comment = ""):
+    def __init__(self, abfID, colorCode="", comment=""):
         self.abfID = abfID
         self.colorCode = colorCode
         self.comment = comment
@@ -46,15 +48,17 @@ class CellNote:
 
 
 class CellsFile:
-    def __init__(self, pathCellsFile):
+    def __init__(self, abfFolder, cellsFileName="cells.txt"):
 
-        self.path = os.path.abspath(pathCellsFile)
+        self.path = os.path.join(abfFolder, cellsFileName)
+        self.path = os.path.abspath(self.path)
 
-        if os.path.exists(pathCellsFile):
+        if os.path.exists(self.path):
             self._read()
         else:
             self.cellNotes = []
             self.abfIdsNoted = []
+            print(f"warning: cells file does not exist [{self.path}]")
 
     def _read(self):
 
@@ -86,7 +90,7 @@ class CellsFile:
                 continue
 
     def getUnknownCells(self, abfIdList):
-        """Return a list of ABFs unaccounted for in cells.txt"""
+        """Return a list of ABFs unaccounted for in the cells file"""
         return [x for x in abfIdList if not x in self.abfIdsNoted]
 
     def getNoteForAbf(self, abfID):
@@ -95,15 +99,46 @@ class CellsFile:
                 return note
         return CellNote(abfID)
 
+    def _backup(self, subFolderName):
+        saveFolderPath = os.path.join(
+            os.path.dirname(self.path), subFolderName)
+        if not os.path.isdir(saveFolderPath):
+            print("ERROR: not a folder:", saveFolderPath)
+            return
+        timestamp = time.strftime("%Y-%m-%d", time.localtime())
+        oldName = os.path.splitext(os.path.basename(self.path))[0]
+        fileName = f"{oldName}-backup-{timestamp}.txt"
+        backupFilePath = os.path.join(saveFolderPath, fileName)
+        if not os.path.exists(backupFilePath):
+            print(">> BACKED UP:", backupFilePath)
+            shutil.copy(self.path, backupFilePath)
+
+    def modify(self, abfID, colorCode, comment, backupSubFolderName):
+        self._backup(backupSubFolderName)
+        print("cells file:", self.path)
+        print("modifying note for:", abfID)
+        print("setting color:", colorCode)
+        print("setting comment:", comment)
+
+        newCellsLine = f"{abfID} {colorCode} {comment}"
+
+        with open(self.path) as f:
+            lines = f.read().split("\n")
+        for i, line in enumerate(lines):
+            if line.startswith(abfID):
+                print(">> REPLACING:", line)
+                print(">> WITH THIS:", newCellsLine)
+                lines[i] = newCellsLine
+                break
+        else:
+            print(">> NEW LINE:", newCellsLine)
+            lines.append(newCellsLine)
+        
+        with open(self.path, 'w') as f:
+            f.write("\n".join(lines))
+        print(">> SAVED:", self.path)
+
     def __repr__(self):
         justHeaders = [x for x in self.cellNotes if isinstance(x, str)]
         justCells = [x for x in self.cellNotes if isinstance(x, CellNote)]
         return "CellsFile with %d headers and %d ABFs" % (len(justHeaders), len(justCells))
-
-        return
-
-
-if __name__ == "__main__":
-    cells = CellsFile(R"X:\Data\CRH-Cre\oxt-tone\OXT-preincubation\cells.txt")
-    print(cells)
-    print("DONE")

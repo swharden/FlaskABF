@@ -14,7 +14,8 @@ def pageParentHeader(abfFolder, parentNote):
     assert isinstance(parentNote, abfBrowse.cellsFile.CellNote)
     html = ""
     html += f"<div style='background-color: {parentNote.color}; padding: .5em;'>"
-    html += f"<span class='title'>PARENT: {parentNote.abfID}</span>"
+    html += f"<span class='title'>PARENT: {parentNote.abfID}</span> "
+    #html += abfBrowse.htmlTools.copyButton("copy path", abfFolder.path)
     html += "</div>"
     return html
 
@@ -27,7 +28,7 @@ def getColorBoxesHTML(currentColorCode=""):
         checked = "checked" if colorCode == currentColorCode else ""
         html += f"""
         <span style='margin: 2px; padding: 5px;  border: solid 1px black; background-color: {color};'>
-        <input type='radio' name='color' value='{colorCode}' {checked} >
+        <input type='radio' name='colorCode' value='{colorCode}' {checked} >
         </span>
         """
     html += "</div>"
@@ -38,15 +39,15 @@ def pageParentNotes(abfFolder, parentNote):
     assert isinstance(abfFolder, abfBrowse.AbfFolder)
     assert isinstance(parentNote, abfBrowse.cellsFile.CellNote)
 
-    parentPath = os.path.join(abfFolder.path, parentNote.abfID+".abf")
-    url = parentPath.replace("\\", "/")
-    url = "/ABFparent/" + url
-    url = url.replace("//", "/")
+    abfPath = os.path.join(abfFolder.path, parentNote.abfID) + ".abf"
+    url = "/ABFparent/" + abfPath.replace("\\", "/")
 
     html = ""
-    html += f"<form action='{url}' method='get' style='margin: 0px;'>"
+    html += f"<form action='{url}' method='post' style='margin: 0px;'>"
+    html += f"<input type='hidden' name='abfFolderPath' value='{abfFolder.path}' />"
+    html += f"<input type='hidden' name='abfID' value='{parentNote.abfID}' />"
     html += f"<div style='background-color: #DDD; padding: .5em;'>"
-    html += getColorBoxesHTML()
+    html += getColorBoxesHTML(parentNote.colorCode)
     html += f"<input style='margin-top: 8px;' type='text' size='35' name='comment' value='{parentNote.comment}'> "
     html += f"<input type='submit' value='Submit'> "
     html += "<a href=''>refresh menu</a>"
@@ -122,6 +123,9 @@ def generateHtml(pathLocal):
     Options are available to edit comments for this parent.
     """
 
+    if not os.path.exists(pathLocal):
+        return f"ERROR: file does not exist: [{pathLocal}]"
+
     pathFolder = os.path.dirname(pathLocal)
     parentAbfFileName = os.path.basename(pathLocal)
     parentAbfId = os.path.splitext(parentAbfFileName)[0]
@@ -131,10 +135,10 @@ def generateHtml(pathLocal):
         parentAbfId = list(abfFolder.abfList.family.keys())[0]
 
     if not parentAbfId in abfFolder.abfList.family.keys():
-        html = f"ERROR: [{parentAbfId}] is not a parent."
+        html = f"ERROR: [{pathLocal}] is not a parent ABF"
         return abfBrowse.htmlTools.htmlPageWrap(html)
 
-    cellsFile = abfBrowse.CellsFile(abfFolder.path+"/cells.txt")
+    cellsFile = abfBrowse.CellsFile(abfFolder.path)
     parentNote = cellsFile.getNoteForAbf(parentAbfId)
 
     html = ""

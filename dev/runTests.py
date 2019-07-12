@@ -39,8 +39,10 @@ def runAllTests(launchBrowser = True):
 
     print("ALL TESTS PASSED")
 
-    if launchBrowser:
-        os.system(PATH_HERE+"/testFrames.html")  # lanuch a browser window
 
 if __name__ == "__main__":
-    runAllTests()
+    #runAllTests()
+    testMenu(R"X:\Data\SD\Piriform Oxytocin\00 pilot experiments\2019-01-08 stim TR L3P")
+    testParent(R"X:\Data\SD\Piriform Oxytocin\00 pilot experiments\2019-01-08 stim TR L3P\19110032.abf")
+    
+    os.system(PATH_HERE+"/testFrames.html")

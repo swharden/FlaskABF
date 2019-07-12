@@ -29,7 +29,6 @@ def menuDirectoryNavigator(currentPath):
         html += f"<div>{padding}<a href='{url}' target='_top'>{baseNames[i]}</a></div>"
     html += "<hr>"
     html += abfBrowse.htmlTools.copyButton("copy path", allPaths[i])
-    html += abfBrowse.htmlTools.copyButton("copy link", url)
     html += abfBrowse.htmlTools.refreshButton()
     html += "</div>"
 
@@ -44,7 +43,7 @@ def menuParentCellList(abfFolder):
     html += "<div><a href='' target='content'>Origin Commands</a></div>"
     html += "</div>"
 
-    cells = abfBrowse.CellsFile(abfFolder.path+"/cells.txt")
+    cells = abfBrowse.CellsFile(abfFolder.path)
     unknownCells = cells.getUnknownCells(abfFolder.abfList.family.keys())
 
     html += "<div class='menuCellList'>"

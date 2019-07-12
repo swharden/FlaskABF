@@ -2,6 +2,7 @@ import time
 import os
 
 import flask
+from flask import request
 app = flask.Flask(__name__)
 
 import abfBrowse
@@ -12,7 +13,6 @@ def localPathFromUrl(url):
     if url.startswith("X/"):
         url = url[2:]
     localPath = os.path.join(abfBrowse.LOCAL_DRIVE_LETTER+':/', url)
-    print("local path:", localPath)
     return localPath
 
 def replaceLocalPath(html):
@@ -22,13 +22,12 @@ def replaceLocalPath(html):
 
 def showRequest(pathUrl):
     print()
-    print(f"REQUEST: [{pathUrl}]")
+    print(f"REQUEST: {pathUrl}")
 
 @app.route('/')
 def showIndex():
     html = "<h1>TEST LINKS</h1>"
-    html += "<div><a href='/ABFviewer/X/Data/SD/LHA Oxytocin/pilot study/abfs'>ABFviewer1</a></div>"
-    html += "<div><a href='/ABFviewer/X/Data/CRH-Cre/oxt-tone/OXT-preincubation'>ABFviewer2</a></div>"
+    html += "<div><a href='/ABFviewer/X/Data/SD/Piriform Oxytocin/00 pilot experiments/2019-01-08 stim TR L3P'>test folder</a></div>"
     return html
 
 
@@ -66,11 +65,24 @@ def showAbfMenu(pathUrl):
         return f"ERROR: does not exist [{pathLocal}]"
 
 
-@app.route('/ABFparent/X/<path:pathUrl>')
+@app.route('/ABFparent/X/<path:pathUrl>', methods=['POST', 'GET'])
 def showAbfParent(pathUrl):
     showRequest(pathUrl)
     pathLocal = localPathFromUrl(pathUrl)
     if os.path.isfile(pathLocal):
+        if request.method == 'POST':
+            try:
+                abfFolderPath = request.form['abfFolderPath']
+                abfID = request.form['abfID']
+                colorCode = request.form['colorCode']
+                comment = request.form['comment']
+                print(f"updating cell notes in [{abfFolderPath}]:")
+                print(f"ABFID: {abfID}, colorCode: {colorCode}, comment: {comment}")
+                cellsFile = abfBrowse.CellsFile(abfFolderPath)
+                cellsFile.modify(abfID, colorCode, comment, "swhlab")
+                print("success!")
+            except:
+                print("bad POST, no change to cells file")
         html = abfBrowse.pages.parent.generateHtml(pathLocal)
         return replaceLocalPath(html)
     else:
