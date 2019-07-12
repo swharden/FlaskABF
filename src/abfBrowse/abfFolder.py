@@ -1,3 +1,9 @@
+"""
+This file contains classes which help manage ABF folder contents.
+This aids in grouping ABFs and data images into clusteres by parent.
+"""
+
+
 import os
 import glob
 
@@ -19,17 +25,18 @@ class AbfList:
 
     def _identifyAbfFiles(self):
         """make lists of ABF and non-ABF files."""
-        self.fileNamesAbf, self.fileNamesOther = [], []
+        self.fileNamesAbf, self.fileNamesOther, self.abfIDs = [], [], []
         for fileName in sorted(self.fileNames):
             if str(fileName).lower().endswith(".abf"):
                 self.fileNamesAbf.append(fileName)
+                self.abfIDs.append(os.path.splitext(fileName)[0])
             else:
                 self.fileNamesOther.append(fileName)
 
     def _lookupFamily(self):
         """update family parent/children dictionary (parents are keys)."""
         nonAbfFileList = ",".join(self.fileNamesOther)
-        self.family = {}
+        self.family = {"orphan": []}
         parent = "orphan"
         for fileName in self.fileNamesAbf:
             abfID = os.path.splitext(fileName)[0]
@@ -39,6 +46,8 @@ class AbfList:
                     self.family[parent] = [abfID]
             else:
                 self.family[parent] = self.family[parent] + [abfID]
+        if len(self.family["orphan"]) == 0:
+            self.family.pop("orphan")
 
     def __repr__(self):
         return f"ABF list with {len(self.fileNames)})"
@@ -61,9 +70,14 @@ class AbfFolder:
         assert os.path.isdir(pathFolder)
 
         self.path = os.path.abspath(pathFolder)
-        self.fileNames = sorted(os.listdir(self.path))
+        self._scanThisFolder()
         self._scanAnalysisFolder()
         self.abfList = AbfList(self.fileNames)
+
+    def _scanThisFolder(self):
+        self.fileNames = sorted(os.listdir(self.path))
+        if "Thumbs.db" in self.fileNames:
+            self.fileNames.remove("Thumbs.db")
 
     def _scanAnalysisFolder(self):
         ANALYSIS_FOLDER_NAMES = ["autoAnalysis", "swhlab"]
@@ -74,14 +88,9 @@ class AbfFolder:
             if os.path.isdir(folderPath):
                 self.analysisFolder = folderPath
                 self.analysisFiles = sorted(os.listdir(folderPath))
+                if "Thumbs.db" in self.analysisFiles:
+                    self.analysisFiles.remove("Thumbs.db")
                 return
 
     def __repr__(self):
         return f"ABF folder [{self.path}] with {len(self.fileNames)} files"
-
-
-if __name__ == "__main__":
-    fldr = AbfFolder(R"X:\Data\CRH-Cre\oxt-tone\OXT-preincubation")
-    print(fldr)
-    print("analysis folder:", fldr.analysisFolder)
-    print(fldr.abfList)

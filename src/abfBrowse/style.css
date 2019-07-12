@@ -1,0 +1,88 @@
+body{
+    font-family: Verdana, sans-serif;
+}
+
+a {
+    text-decoration: none;
+    color: blue;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.title{
+    font-family: "Arial Narrow", Arial, sans-serif;
+    font-weight: bold;
+}
+
+.smallButton{
+    font-family: monospace;
+    font-size: 80%;
+    border-style: none;
+    border: 1px solid #CCC;
+    background-color: white;
+    color: black;
+}
+
+/***********************************************************
+MENU 
+***********************************************************/
+
+.menuFileBrowser{
+    font-family: monospace;
+    background-color: #EEEEEE;
+    border: 1px solid #AAAAAA;
+    padding: 5px;
+    white-space: nowrap;
+    margin-bottom: 1em;
+}
+
+.menuEphysProject{
+    font-family: monospace;
+    background-color: #FFFFAA;
+    border: 1px solid #d6d690;
+    padding: 5px;
+    white-space: nowrap;
+}
+
+.menuCellList{
+    font-family: monospace;
+    padding: 5px;
+    white-space: nowrap;
+    margin-bottom: 1em;
+}
+
+.menuCellComments{
+    color: #AAAAAA;
+}
+
+/***********************************************************
+PARENT 
+***********************************************************/
+.analysisImage{
+    margin: 10px;
+    border: 1px solid black;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, .3);
+    height: 200px;
+}
+
+.abfInfoRow{
+    font-family: monospace;
+    color: gray;
+    padding-top: .2em;
+}
+
+.abfInfoComment{
+    color: black;
+    background-color: #FFFFAA;
+    padding-left: .5em;
+    padding-right: .5em;
+}
+
+.abfInfoWarning{
+    color: white;
+    background-color: rgb(255, 0, 0);
+    padding-left: .5em;
+    padding-right: .5em;
+}
