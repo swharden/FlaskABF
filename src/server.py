@@ -15,14 +15,21 @@ def localPathFromUrl(url):
     localPath = os.path.join(abfBrowse.LOCAL_DRIVE_LETTER+':/', url)
     return localPath
 
+
 def replaceLocalPath(html):
     """Convert local paths to URL format (drive letter -> /X/)"""
     html = html.replace(abfBrowse.LOCAL_DRIVE_LETTER+":/", "X/")
     return html
 
-def showRequest(pathUrl):
+
+def showRequest(pathUrl, request):
     print()
     print(f"REQUEST: {pathUrl}")
+    for key in request.args.keys():
+        print(f"GET['{key}']={request.args[key]}")
+    for key in request.form.keys():
+        print(f"POST['{key}']={request.form[key]}")
+
 
 @app.route('/')
 def showIndex():
@@ -33,7 +40,10 @@ def showIndex():
 
 @app.route('/X/<path:pathUrl>')
 def showFileOrFolder(pathUrl):
-    showRequest(pathUrl)
+    """
+    Display the front page
+    """
+    showRequest(pathUrl, request)
     pathLocal = localPathFromUrl(pathUrl)
     if os.path.isdir(pathLocal):
         return f"directory index of [{pathLocal}]"
@@ -45,7 +55,10 @@ def showFileOrFolder(pathUrl):
 
 @app.route('/ABFviewer/X/<path:pathUrl>')
 def showAbfView(pathUrl):
-    showRequest(pathUrl)
+    """
+    Display a frameset containing a menu and an ABFfolder
+    """
+    showRequest(pathUrl, request)
     pathLocal = localPathFromUrl(pathUrl)
     if os.path.isdir(pathLocal):
         html = abfBrowse.pages.frames.generateHtml(pathLocal)
@@ -56,7 +69,10 @@ def showAbfView(pathUrl):
 
 @app.route('/ABFmenu/X/<path:pathUrl>')
 def showAbfMenu(pathUrl):
-    showRequest(pathUrl)
+    """
+    Display the menu for an ABF folder
+    """
+    showRequest(pathUrl, request)
     pathLocal = localPathFromUrl(pathUrl)
     if os.path.isdir(pathLocal):
         html = abfBrowse.pages.menu.generateHtml(pathLocal)
@@ -67,22 +83,32 @@ def showAbfMenu(pathUrl):
 
 @app.route('/ABFparent/X/<path:pathUrl>', methods=['POST', 'GET'])
 def showAbfParent(pathUrl):
-    showRequest(pathUrl)
+    """
+    Display the ABF list and data for a parent ABF.
+      - also processes changes to cells.txt
+      - also deletes graphs for child ABFs
+      - also marks ABFs as ignored
+      - also analyzes new ABFs
+    """
+    showRequest(pathUrl, request)
     pathLocal = localPathFromUrl(pathUrl)
     if os.path.isfile(pathLocal):
-        if request.method == 'POST':
-            try:
-                abfFolderPath = request.form['abfFolderPath']
-                abfID = request.form['abfID']
-                colorCode = request.form['colorCode']
-                comment = request.form['comment']
-                print(f"updating cell notes in [{abfFolderPath}]:")
-                print(f"ABFID: {abfID}, colorCode: {colorCode}, comment: {comment}")
-                cellsFile = abfBrowse.CellsFile(abfFolderPath)
-                cellsFile.modify(abfID, colorCode, comment, "swhlab")
-                print("success!")
-            except:
-                print("bad POST, no change to cells file")
+
+        if ('colorCode' in request.form.keys()):
+            print("Processing a change to cells.txt...")
+            cellsFile = abfBrowse.CellsFile(request.form['abfFolderPath'])
+            cellsFile.modify(
+                request.form['abfID'], 
+                request.form['colorCode'], 
+                request.form['comment'], 
+                "swhlab")
+
+        if ('deleteGraphsForChildren' in request.args.keys()):
+            print("Deleting graphs for children...")
+            abfFldr = abfBrowse.AbfFolder(os.path.dirname(pathLocal))
+            abfFldr.deleteChildGraphs(os.path.basename(pathLocal))
+            print("complete.")
+
         html = abfBrowse.pages.parent.generateHtml(pathLocal)
         return replaceLocalPath(html)
     else:
@@ -91,10 +117,20 @@ def showAbfParent(pathUrl):
 
 @app.route('/ABFfolder/X/<path:pathUrl>')
 def showAbfFolder(pathUrl):
-    showRequest(pathUrl)
+    showRequest(pathUrl, request)
     pathLocal = localPathFromUrl(pathUrl)
     if os.path.isdir(pathLocal):
         html = abfBrowse.pages.project.generateHtml(pathLocal)
+        return replaceLocalPath(html)
+    else:
+        return f"ERROR: does not exist [{pathLocal}]"
+
+@app.route('/ABFanalyze/X/<path:pathUrl>')
+def showAbfAnalyze(pathUrl):
+    showRequest(pathUrl, request)
+    pathLocal = localPathFromUrl(pathUrl)
+    if os.path.isdir(pathLocal):
+        html = abfBrowse.pages.analyze.generateHtml(pathLocal)
         return replaceLocalPath(html)
     else:
         return f"ERROR: does not exist [{pathLocal}]"

@@ -24,6 +24,8 @@ def refreshButton():
     html += "</FORM>"
     return html
 
+def autoRefresh(seconds = 5):
+    return f"<meta http-equiv='refresh' content='{seconds}' />"
 
 def htmlPageWrap(htmlContent):
     with open(PATH_HERE+"/style.css") as f:

@@ -55,6 +55,27 @@ def pageParentNotes(abfFolder, parentNote):
     html += "</form>"
     return html
 
+def pageFolderActions(abfFolder, parentNote):
+    
+    abfPath = os.path.join(abfFolder.path, parentNote.abfID) + ".abf"
+    urlParent = "/ABFparent/" + abfPath.replace("\\", "/")
+    urlExperiment =  "/ABFexperiment/" + abfFolder.path.replace("\\", "/")
+    urlAnalyze =  "/ABFanalyze/" + abfFolder.path.replace("\\", "/")
+
+    html = ""
+    html += "<div style='background-color: #F6F6F6; padding: .5em; color: gray'>"
+    html += f"<span style='color: black;' class='title'>Actions:</span> "
+
+    unanalyzedAbfs = abfFolder.abfsRequiringAnalysis()
+    if len(unanalyzedAbfs):
+        html += f"<a href='{urlAnalyze}' class='abfAnalysisNeeded'>Analyze {len(unanalyzedAbfs)} new ABFs</a> | "
+    else:
+        html += f"<a href='{urlAnalyze}' style='color: gray;'>No ABFs require analysis</a> | "
+
+    html += f"<a href='{urlParent}?deleteGraphsForChildren' class='' style='color: gray;'>delete graphs</a> | "
+    html += f"<a href='{urlExperiment}' class=''>experiment notes</a>"
+    html += "</div>"
+    return html
 
 def pageParentChildAbfList(abfFolder, parentNote):
     assert isinstance(abfFolder, abfBrowse.AbfFolder)
@@ -145,6 +166,7 @@ def generateHtml(pathLocal):
     html += pageParentHeader(abfFolder, parentNote)
     html += pageParentNotes(abfFolder, parentNote)
     html += pageParentChildAbfList(abfFolder, parentNote)
+    html += pageFolderActions(abfFolder, parentNote)
     html += pageParentImages(abfFolder, parentNote)
     html = abfBrowse.htmlTools.htmlPageWrap(html)
 

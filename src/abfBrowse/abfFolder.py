@@ -24,7 +24,7 @@ class AbfList:
         self._lookupFamily()
 
     def _identifyAbfFiles(self):
-        """make lists of ABF and non-ABF files."""
+        """make separate lists of ABF and non-ABF files."""
         self.fileNamesAbf, self.fileNamesOther, self.abfIDs = [], [], []
         for fileName in sorted(self.fileNames):
             if str(fileName).lower().endswith(".abf"):
@@ -94,3 +94,43 @@ class AbfFolder:
 
     def __repr__(self):
         return f"ABF folder [{self.path}] with {len(self.fileNames)} files"
+
+    def _stripExtension(self, abfID):
+        """If abfID ends with .abf, strip the extension."""
+        if abfID.lower().endswith(".abf"):
+            return os.path.splitext(abfID)[0]
+        else:
+            return abfID
+
+    def deleteChildGraphs(self, parentAbfID):
+        """Delete graphs (in the analysis folder) for all children of the given parent."""
+        parentAbfID = self._stripExtension(parentAbfID)
+        children = self.abfList.family[parentAbfID]
+        print(f"deleting graphs associated with {len(children)} child ABFs...")
+        for childAbfID in children:
+            analysisFiles = self.analysisFilesForAbf(childAbfID, skipTif=True)
+            analysisFiles = [os.path.join(self.analysisFolder, x)
+                             for x in analysisFiles]
+            print(
+                f"child {childAbfID} has {len(analysisFiles)} graphs to delete...")
+            for fname in analysisFiles:
+                print(f"  deleting {fname}")
+                os.remove(fname)
+
+    def analysisFilesForAbf(self, abfID, skipTif=False):
+        """Return a list of filenames of images associated with an ABF."""
+        abfID = self._stripExtension(abfID)
+        analysisFiles = [x for x in self.analysisFiles if x.startswith(abfID)]
+        if skipTif:
+            analysisFiles = [
+                x for x in analysisFiles if not ".tif." in x.lower()]
+        return analysisFiles
+
+    def abfsRequiringAnalysis(self):
+        """Return a list of ABFs without associated graphs in the analysis folder."""
+        abfs = []
+        for abfFileName in self.abfList.fileNamesAbf:
+            analysisFiles = self.analysisFilesForAbf(abfFileName, skipTif=True)
+            if len(analysisFiles) == 0:
+                abfs.append(abfFileName)
+        return abfs
