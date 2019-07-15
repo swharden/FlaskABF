@@ -35,7 +35,7 @@ class AbfList:
 
     def _lookupFamily(self):
         """update family parent/children dictionary (parents are keys)."""
-        nonAbfFileList = ",".join(self.fileNamesOther)
+        nonAbfFileList = ","+",".join(self.fileNamesOther)
         self.family = {"orphan": []}
         parent = "orphan"
         for fileName in self.fileNamesAbf:
@@ -109,21 +109,21 @@ class AbfFolder:
         print(f"deleting graphs associated with {len(children)} child ABFs...")
         for childAbfID in children:
             analysisFiles = self.analysisFilesForAbf(childAbfID, skipTif=True)
-            analysisFiles = [os.path.join(self.analysisFolder, x)
-                             for x in analysisFiles]
-            print(
-                f"child {childAbfID} has {len(analysisFiles)} graphs to delete...")
-            for fname in analysisFiles:
-                print(f"  deleting {fname}")
-                os.remove(fname)
+            for fileName in analysisFiles:
+                filePath = os.path.join(self.analysisFolder, fileName)
+                print(f"  deleting {filePath}")
+                os.remove(filePath)
 
     def analysisFilesForAbf(self, abfID, skipTif=False):
         """Return a list of filenames of images associated with an ABF."""
         abfID = self._stripExtension(abfID)
-        analysisFiles = [x for x in self.analysisFiles if x.startswith(abfID)]
-        if skipTif:
-            analysisFiles = [
-                x for x in analysisFiles if not ".tif." in x.lower()]
+        analysisFiles = []
+        for fileName in self.analysisFiles:
+            if fileName.startswith(abfID):
+                if skipTif and ".tif." in fileName.lower():
+                    continue
+                else:
+                    analysisFiles.append(fileName)
         return analysisFiles
 
     def abfsRequiringAnalysis(self):

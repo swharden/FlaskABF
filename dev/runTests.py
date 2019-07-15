@@ -54,9 +54,9 @@ def runAllTests(launchBrowser = True):
 
 if __name__ == "__main__":
     #runAllTests()
-    #testMenu(R"X:\Data\SD\Piriform Oxytocin\00 pilot experiments\2019-01-08 stim TR L3P")
-    #testParent(R"X:\Data\SD\Piriform Oxytocin\00 pilot experiments\2019-01-08 stim TR L3P\19110032.abf")
-    #os.system(PATH_HERE+"/testFrames.html")
+    testMenu(R"X:\Data\SD\Piriform Oxytocin\00 pilot experiments\2019-01-08 stim TR L3P")
+    testParent(R"X:\Data\SD\Piriform Oxytocin\00 pilot experiments\2019-01-08 stim TR L3P\19110032.abf")
+    os.system(PATH_HERE+"/testFrames.html")
 
     #testAnalysis(R"X:\Data\SD\Piriform Oxytocin\00 pilot experiments\2019-01-08 stim TR L3P")
     #os.system(PATH_HERE+"/testAnalysis.html")
@@ -64,6 +64,5 @@ if __name__ == "__main__":
     #testExperiment(R"X:\Data\SD\Piriform Oxytocin\00 pilot experiments\2019-01-08 stim TR L3P")
     #os.system(PATH_HERE+"/testExperiment.html")
 
-    
-    fldr = abfBrowse.AbfFolder(R"X:\Data\SD\Piriform Oxytocin\00 pilot experiments\2018-05-30 pPIR CCh")
-    fldr.convertTifsToJpeg()
+    #fldr = abfBrowse.AbfFolder(R"X:\Data\SD\Piriform Oxytocin\00 pilot experiments\2018-05-30 pPIR CCh")
+    #fldr.convertTifsToJpeg()

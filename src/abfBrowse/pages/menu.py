@@ -55,8 +55,12 @@ def menuParentCellList(abfFolder):
         elif isinstance(line, abfBrowse.CellNote):
             abfUrl = os.path.join(abfFolder.path, line.abfID+".abf").replace("\\", "/")
             abfLink = f"<a href='/ABFparent/{abfUrl}' target='content' style='background-color: {line.color};'>{line.abfID}</a>"
+            if line.abfID in abfFolder.abfList.family:
+                abfCount = f"({len(abfFolder.abfList.family[line.abfID])})"
+            else:
+                abfCount = f"(?)"
             abfComment = f"<span class='menuCellComments'>{line.comment}</span>"
-            html += f"<div>{abfLink} {abfComment}</div>"
+            html += f"<div>{abfLink} {abfCount} {abfComment}</div>"
 
     html += f"<br><div class='title'><b>Unknown:</b></div>"
     for unknownCell in unknownCells:
