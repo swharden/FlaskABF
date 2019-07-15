@@ -34,6 +34,12 @@ def testAnalysis(folderPath):
     with open(os.path.abspath(PATH_HERE + "/testAnalysis.html"), 'w') as f:
         f.write(html)
 
+def testExperiment(folderPath):
+    print(f"testing experiment page for [{folderPath}]")
+    html = abfBrowse.pages.experiment.generateHtml(folderPath)
+    with open(os.path.abspath(PATH_HERE + "/testExperiment.html"), 'w') as f:
+        f.write(html)
+
 def runAllTests(launchBrowser = True):
 
     for testFolder in testPaths.folders:
@@ -52,7 +58,12 @@ if __name__ == "__main__":
     #testParent(R"X:\Data\SD\Piriform Oxytocin\00 pilot experiments\2019-01-08 stim TR L3P\19110032.abf")
     #os.system(PATH_HERE+"/testFrames.html")
 
-    testAnalysis(R"X:\Data\SD\Piriform Oxytocin\00 pilot experiments\2019-01-08 stim TR L3P")
-    os.system(PATH_HERE+"/testAnalysis.html")
+    #testAnalysis(R"X:\Data\SD\Piriform Oxytocin\00 pilot experiments\2019-01-08 stim TR L3P")
+    #os.system(PATH_HERE+"/testAnalysis.html")
+
+    #testExperiment(R"X:\Data\SD\Piriform Oxytocin\00 pilot experiments\2019-01-08 stim TR L3P")
+    #os.system(PATH_HERE+"/testExperiment.html")
 
     
+    fldr = abfBrowse.AbfFolder(R"X:\Data\SD\Piriform Oxytocin\00 pilot experiments\2018-05-30 pPIR CCh")
+    fldr.convertTifsToJpeg()

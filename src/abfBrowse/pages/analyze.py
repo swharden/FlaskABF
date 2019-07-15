@@ -16,4 +16,4 @@ def generateHtml(pathLocal):
         html += abfBrowse.htmlTools.autoRefresh(1)
     else:
          html += f"analysis complete!"
-    return html
+    return abfBrowse.htmlTools.htmlPageWrap(html)

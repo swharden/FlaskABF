@@ -115,12 +115,12 @@ def showAbfParent(pathUrl):
         return f"ERROR: does not exist: [{pathLocal}.abf]"
 
 
-@app.route('/ABFfolder/X/<path:pathUrl>')
-def showAbfFolder(pathUrl):
+@app.route('/ABForigin/X/<path:pathUrl>')
+def showAbfOrigin(pathUrl):
     showRequest(pathUrl, request)
     pathLocal = localPathFromUrl(pathUrl)
     if os.path.isdir(pathLocal):
-        html = abfBrowse.pages.project.generateHtml(pathLocal)
+        html = abfBrowse.pages.origin.generateHtml(pathLocal)
         return replaceLocalPath(html)
     else:
         return f"ERROR: does not exist [{pathLocal}]"
@@ -131,6 +131,16 @@ def showAbfAnalyze(pathUrl):
     pathLocal = localPathFromUrl(pathUrl)
     if os.path.isdir(pathLocal):
         html = abfBrowse.pages.analyze.generateHtml(pathLocal)
+        return replaceLocalPath(html)
+    else:
+        return f"ERROR: does not exist [{pathLocal}]"
+
+@app.route('/ABFexperiment/X/<path:pathUrl>')
+def showAbfExperiment(pathUrl):
+    showRequest(pathUrl, request)
+    pathLocal = localPathFromUrl(pathUrl)
+    if os.path.isdir(pathLocal):
+        html = abfBrowse.pages.experiment.generateHtml(pathLocal)
         return replaceLocalPath(html)
     else:
         return f"ERROR: does not exist [{pathLocal}]"

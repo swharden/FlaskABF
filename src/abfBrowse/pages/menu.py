@@ -36,11 +36,13 @@ def menuDirectoryNavigator(currentPath):
 
 
 def menuParentCellList(abfFolder):
+    urlExperiment =  "/ABFexperiment/" + abfFolder.path.replace("\\", "/")
+    urlOrigin = "/ABForigin/" + abfFolder.path.replace("\\", "/")
     html = ""
     html += "<div class='menuEphysProject'>"
     html += "<span class='title'>Electrophysiology Project</span><br>"
-    html += "<div><a href='' target='content'>Experiment Notes</a></div>"
-    html += "<div><a href='' target='content'>Origin Commands</a></div>"
+    html += f"<div><a href='{urlExperiment}' target='content'>Experiment Notes</a></div>"
+    html += f"<div><a href='{urlOrigin}' target='content'>Origin Commands</a></div>"
     html += "</div>"
 
     cells = abfBrowse.CellsFile(abfFolder.path)

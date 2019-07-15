@@ -162,6 +162,8 @@ def generateHtml(pathLocal):
     cellsFile = abfBrowse.CellsFile(abfFolder.path)
     parentNote = cellsFile.getNoteForAbf(parentAbfId)
 
+    abfFolder.convertTifsOfParent(parentAbfId)
+
     html = ""
     html += pageParentHeader(abfFolder, parentNote)
     html += pageParentNotes(abfFolder, parentNote)

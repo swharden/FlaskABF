@@ -1,3 +1,6 @@
+<html>
+<head>
+<style>
 body{
     font-family: Verdana, sans-serif;
 }
@@ -99,3 +102,21 @@ PARENT
     padding: 10px;
     background-color: #EEEEEE;
 }
+</style>
+
+<script>
+    function copyToClipboard(elementId) {
+    var input = document.createElement("input");
+    document.body.appendChild(input);
+    input.value=document.getElementById(elementId).innerText;
+    input.select();
+    document.execCommand("copy");
+    document.body.removeChild(input);
+    }
+</script>
+
+</head>
+<body>
+<h1>Experiment Notes</h1><div><code>X:\Data\SD\Piriform Oxytocin\00 pilot experiments\2019-01-08 stim TR L3P\experiment.txt</code></div><div class='experimentTextBlock'>notes weren't recorded in experiment.txt files at this time<br><br>... maybe check the lab notebook?</div>
+</body>
+</html>

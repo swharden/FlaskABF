@@ -3,7 +3,7 @@ This file contains classes which help manage ABF folder contents.
 This aids in grouping ABFs and data images into clusteres by parent.
 """
 
-
+import abfBrowse
 import os
 import glob
 
@@ -134,3 +134,24 @@ class AbfFolder:
             if len(analysisFiles) == 0:
                 abfs.append(abfFileName)
         return abfs
+
+    def convertTifsOfParent(self, parentId):
+
+        childTifFileNames = []
+        for child in self.abfList.family[parentId]:
+            for fileName in self.fileNames:
+                if fileName.startswith(child) and fileName.endswith(".tif"):
+                    childTifFileNames.append(fileName)
+
+        tifsNeedingConversion = []
+        for tifFileName in childTifFileNames:
+            if not tifFileName+".jpg" in self.analysisFiles:
+                tifsNeedingConversion.append(tifFileName)
+
+        for tifFileName in tifsNeedingConversion:
+            tifPath = os.path.join(self.path, tifFileName)
+            jpgPath = os.path.join(self.analysisFolder, tifFileName+".jpg")
+            abfBrowse.imaging.convertTifToJpg(tifPath, jpgPath)
+
+        if len(tifsNeedingConversion):
+            self._scanAnalysisFolder()
