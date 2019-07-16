@@ -80,17 +80,13 @@ class AbfFolder:
             self.fileNames.remove("Thumbs.db")
 
     def _scanAnalysisFolder(self):
-        ANALYSIS_FOLDER_NAMES = ["autoAnalysis", "swhlab"]
-        self.analysisFolder = None
-        self.analysisFiles = []
-        for folderName in ANALYSIS_FOLDER_NAMES:
-            folderPath = os.path.join(self.path, folderName)
-            if os.path.isdir(folderPath):
-                self.analysisFolder = folderPath
-                self.analysisFiles = sorted(os.listdir(folderPath))
-                if "Thumbs.db" in self.analysisFiles:
-                    self.analysisFiles.remove("Thumbs.db")
-                return
+        self.analysisFolder = os.path.join(self.path, "swhlab")
+        if os.path.isdir(self.analysisFolder):
+            self.analysisFiles = sorted(os.listdir(self.analysisFolder))
+            if "Thumbs.db" in self.analysisFiles:
+                self.analysisFiles.remove("Thumbs.db")
+        else:
+            self.analysisFiles = []
 
     def __repr__(self):
         return f"ABF folder [{self.path}] with {len(self.fileNames)} files"
@@ -147,6 +143,10 @@ class AbfFolder:
         for tifFileName in childTifFileNames:
             if not tifFileName+".jpg" in self.analysisFiles:
                 tifsNeedingConversion.append(tifFileName)
+
+        if len(tifsNeedingConversion):
+            if not os.path.exists(self.analysisFolder):
+                os.mkdir(self.analysisFolder)
 
         for tifFileName in tifsNeedingConversion:
             tifPath = os.path.join(self.path, tifFileName)
