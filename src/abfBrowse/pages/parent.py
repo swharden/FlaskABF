@@ -55,12 +55,13 @@ def pageParentNotes(abfFolder, parentNote):
     html += "</form>"
     return html
 
+
 def pageFolderActions(abfFolder, parentNote):
-    
+
     abfPath = os.path.join(abfFolder.path, parentNote.abfID) + ".abf"
     urlParent = "/ABFparent/" + abfPath.replace("\\", "/")
-    urlExperiment =  "/ABFexperiment/" + abfFolder.path.replace("\\", "/")
-    urlAnalyze =  "/ABFanalyze/" + abfFolder.path.replace("\\", "/")
+    urlExperiment = "/ABFexperiment/" + abfFolder.path.replace("\\", "/")
+    urlAnalyze = "/ABFanalyze/" + abfFolder.path.replace("\\", "/")
 
     html = ""
     html += "<div style='background-color: #F6F6F6; padding: .5em; color: gray'>"
@@ -76,6 +77,7 @@ def pageFolderActions(abfFolder, parentNote):
     html += f"<a href='{urlExperiment}' class=''>experiment notes</a>"
     html += "</div>"
     return html
+
 
 def pageParentChildAbfList(abfFolder, parentNote):
     assert isinstance(abfFolder, abfBrowse.AbfFolder)
@@ -130,9 +132,11 @@ def pageParentImages(abfFolder, parentNote):
     for child in abfFolder.abfList.family[parentNote.abfID]:
         for analysisFile in abfFolder.analysisFiles:
             if analysisFile.startswith(child):
-                imagePath = os.path.join(
+                # TODO: make this top level
+                imageUrl = os.path.join(
                     abfFolder.analysisFolder, analysisFile)
-                imageUrl = "/"+imagePath.replace("\\", "/")
+                imageUrl = imageUrl.replace(abfBrowse.LOCAL_XRIVE_PREFIX, "X/")
+                imageUrl = "/"+imageUrl.replace("\\", "/")
                 html += f"<a href='{imageUrl}'><img class='analysisImage' src='{imageUrl}'></a> "
     return html
 

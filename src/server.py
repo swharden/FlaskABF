@@ -11,15 +11,15 @@ import abfBrowse
 
 def localPathFromUrl(url):
     """Convert a URL to a local path (/X/ -> drive letter)"""
-    if url.startswith("X/"):
-        url = url[2:]
-    localPath = os.path.join(abfBrowse.LOCAL_DRIVE_LETTER+':/', url)
+    url = url.replace("XData", "Data") #TODO: why?
+    localPath = os.path.join(abfBrowse.LOCAL_XRIVE_PREFIX, url)
+    localPath = os.path.abspath(localPath)
     return localPath
 
 
 def replaceLocalPath(html):
     """Convert local paths to URL format (drive letter -> /X/)"""
-    html = html.replace(abfBrowse.LOCAL_DRIVE_LETTER+":/", "X/")
+    html = html.replace(abfBrowse.LOCAL_XRIVE_PREFIX, "X")
     return html
 
 
