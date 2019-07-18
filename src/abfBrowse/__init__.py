@@ -47,16 +47,14 @@ def getUrl(localPath):
     url = os.path.abspath(localPath)
     url = url.replace(LOCAL_XRIVE_PREFIX, "X/")
     url = url.replace("\\", "/")
-    print(">>>> LOCAL PATH:", localPath)
-    print(">>>> URL:", url)
+    if url.startswith("X//"):
+        url = url.replace("X//","X/")
     return url
 
 
 def getLocalPath(url):
     if not url.startswith("X/"):
         raise Exception("file path URLs must start with 'X/' or '/X/'")
-    localPath = url.replace("X/", LOCAL_XRIVE_PREFIX, 1)
+    localPath = url.replace("X/", LOCAL_XRIVE_PREFIX+"/", 1)
     localPath = os.path.abspath(localPath)
-    print(">>>> URL:", url)
-    print(">>>> LOCAL PATH:", localPath)
     return localPath
