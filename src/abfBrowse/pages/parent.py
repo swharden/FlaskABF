@@ -132,12 +132,9 @@ def pageParentImages(abfFolder, parentNote):
     for child in abfFolder.abfList.family[parentNote.abfID]:
         for analysisFile in abfFolder.analysisFiles:
             if analysisFile.startswith(child):
-                # TODO: make this top level
-                imageUrl = os.path.join(
-                    abfFolder.analysisFolder, analysisFile)
-                imageUrl = imageUrl.replace(abfBrowse.LOCAL_XRIVE_PREFIX, "X/")
-                imageUrl = "/"+imageUrl.replace("\\", "/")
-                html += f"<a href='{imageUrl}'><img class='analysisImage' src='{imageUrl}'></a> "
+                imagePath = abfFolder.analysisFolder+"/"+analysisFile
+                imageUrl = abfBrowse.getUrl(imagePath)
+                html += f"<a href='/{imageUrl}'><img class='analysisImage' src='/{imageUrl}'></a> "
     return html
 
 

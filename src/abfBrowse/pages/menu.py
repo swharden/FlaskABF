@@ -25,11 +25,8 @@ def menuDirectoryNavigator(currentPath):
     html += "<span class='title'>Project Browser</span><br>"
     for i in range(len(allPaths)):
         padding = "&nbsp;"*i
-        # TODO: make this top level
-        url = '/ABFviewer/' + allPaths[i]
-        url = url.replace(abfBrowse.LOCAL_XRIVE_PREFIX, "X/")
-        url = url.replace("\\", "/")
-        html += f"<div>{padding}<a href='{url}' target='_top'>{baseNames[i]}</a></div>"
+        url = abfBrowse.getUrl(allPaths[i])
+        html += f"<div>{padding}<a href='/ABFviewer/{url}' target='_top'>{baseNames[i]}</a></div>"
     html += "<hr>"
     html += abfBrowse.htmlTools.copyButton("copy path", allPaths[i])
     html += abfBrowse.htmlTools.refreshButton()
@@ -39,8 +36,8 @@ def menuDirectoryNavigator(currentPath):
 
 
 def menuParentCellList(abfFolder):
-    urlExperiment = "/ABFexperiment/" + abfFolder.path.replace("\\", "/")
-    urlOrigin = "/ABForigin/" + abfFolder.path.replace("\\", "/")
+    urlExperiment = "/ABFexperiment/" + abfBrowse.getUrl(abfFolder.path)
+    urlOrigin = "/ABForigin/" + abfBrowse.getUrl(abfFolder.path)
     html = ""
     html += "<div class='menuEphysProject'>"
     html += "<span class='title'>Electrophysiology Project</span><br>"
@@ -56,10 +53,7 @@ def menuParentCellList(abfFolder):
         if isinstance(line, str):
             html += f"<br><div class='title'><b>{line}</b></div>"
         elif isinstance(line, abfBrowse.CellNote):
-            # TODO: make this a top level function
-            abfUrl = os.path.join(abfFolder.path, line.abfID+".abf")
-            abfUrl = abfUrl.replace(abfBrowse.LOCAL_XRIVE_PREFIX, "X/")
-            abfUrl = abfUrl.replace("\\", "/")
+            abfUrl = abfBrowse.getUrl(abfFolder.path+"/"+line.abfID+".abf")
             abfLink = f"<a href='/ABFparent/{abfUrl}' target='content' style='background-color: {line.color};'>{line.abfID}</a>"
             if line.abfID in abfFolder.abfList.family:
                 abfCount = f"({len(abfFolder.abfList.family[line.abfID])})"
@@ -70,10 +64,7 @@ def menuParentCellList(abfFolder):
 
     html += f"<br><div class='title'><b>Unknown:</b></div>"
     for unknownCell in unknownCells:
-        # TODO: make this a top level function
-        abfUrl = os.path.join(abfFolder.path, unknownCell+".abf")
-        abfUrl = abfUrl.replace(abfBrowse.LOCAL_XRIVE_PREFIX, "X/")
-        abfUrl = abfUrl.replace("\\", "/")
+        abfUrl = abfBrowse.getUrl(abfFolder.path+"/"+unknownCell+".abf")
         html += f"<div><a href='/ABFparent/{abfUrl}' target='content'>{unknownCell}</a></div>"
 
     html += "</div>"
@@ -95,7 +86,7 @@ def menuFolderContents(abfFolder):
         html += "<div class='title'>Folders:</div>"
         for subFolder in subFolders:
             subFolder = os.path.basename(subFolder[:-1])
-            #TODO: make this top level
+            # TODO: make this top level
             url = os.path.join(abfFolder.path, subFolder)
             url = url.replace(abfBrowse.LOCAL_XRIVE_PREFIX, "X/")
             url = url.replace("\\", "/")
@@ -106,10 +97,7 @@ def menuFolderContents(abfFolder):
         html += "<div class='menuFileBrowser'>"
         html += "<div class='title'>Files:</div>"
         for fileName in fileNames:
-            #TODO: make this top level
-            url = os.path.join(abfFolder.path, fileName)
-            url = url.replace(abfBrowse.LOCAL_XRIVE_PREFIX, "X/")
-            url = url.replace("\\", "/")
+            url = abfBrowse.getUrl(abfFolder.path + "/" + fileName)
             html += f"<div><a href='/{url}' target='content'>{fileName}</a></div>"
         html += "</div>"
 

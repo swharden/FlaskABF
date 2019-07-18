@@ -9,20 +9,6 @@ app = flask.Flask(__name__)
 import abfBrowse
 
 
-def localPathFromUrl(url):
-    """Convert a URL to a local path (/X/ -> drive letter)"""
-    url = url.replace("XData", "Data") #TODO: why?
-    localPath = os.path.join(abfBrowse.LOCAL_XRIVE_PREFIX, url)
-    localPath = os.path.abspath(localPath)
-    return localPath
-
-
-def replaceLocalPath(html):
-    """Convert local paths to URL format (drive letter -> /X/)"""
-    html = html.replace(abfBrowse.LOCAL_XRIVE_PREFIX, "X")
-    return html
-
-
 def showRequest(pathUrl, request):
     print()
     print(f"REQUEST: {pathUrl}")
@@ -45,7 +31,7 @@ def showFileOrFolder(pathUrl):
     Display the front page
     """
     showRequest(pathUrl, request)
-    pathLocal = localPathFromUrl(pathUrl)
+    pathLocal = abfBrowse.getLocalPath("X/"+pathUrl)
     if os.path.isdir(pathLocal):
         return f"directory index of [{pathLocal}]"
     elif os.path.isfile(pathLocal):
@@ -54,35 +40,33 @@ def showFileOrFolder(pathUrl):
         return f"ERROR: path does not exist [{pathLocal}]"
 
 
-@app.route('/ABFviewer/X/<path:pathUrl>')
+@app.route('/ABFviewer/<path:pathUrl>')
 def showAbfView(pathUrl):
     """
     Display a frameset containing a menu and an ABFfolder
     """
     showRequest(pathUrl, request)
-    pathLocal = localPathFromUrl(pathUrl)
+    pathLocal = abfBrowse.getLocalPath(pathUrl)
     if os.path.isdir(pathLocal):
-        html = abfBrowse.pages.frames.generateHtml(pathLocal)
-        return replaceLocalPath(html)
+        return abfBrowse.pages.frames.generateHtml(pathUrl)
     else:
         return f"ERROR: path does not exist [{pathUrl}]"
 
 
-@app.route('/ABFmenu/X/<path:pathUrl>')
+@app.route('/ABFmenu/<path:pathUrl>')
 def showAbfMenu(pathUrl):
     """
     Display the menu for an ABF folder
     """
     showRequest(pathUrl, request)
-    pathLocal = localPathFromUrl(pathUrl)
+    pathLocal = abfBrowse.getLocalPath(pathUrl)
     if os.path.isdir(pathLocal):
-        html = abfBrowse.pages.menu.generateHtml(pathLocal)
-        return replaceLocalPath(html)
+        return abfBrowse.pages.menu.generateHtml(pathLocal)
     else:
         return f"ERROR: does not exist [{pathLocal}]"
 
 
-@app.route('/ABFparent/X/<path:pathUrl>', methods=['POST', 'GET'])
+@app.route('/ABFparent/<path:pathUrl>', methods=['POST', 'GET'])
 def showAbfParent(pathUrl):
     """
     Display the ABF list and data for a parent ABF.
@@ -92,7 +76,7 @@ def showAbfParent(pathUrl):
       - also analyzes new ABFs
     """
     showRequest(pathUrl, request)
-    pathLocal = localPathFromUrl(pathUrl)
+    pathLocal = abfBrowse.getLocalPath(pathUrl)
     if os.path.isfile(pathLocal):
 
         if ('colorCode' in request.form.keys()):
@@ -110,41 +94,37 @@ def showAbfParent(pathUrl):
             abfFldr.deleteChildGraphs(os.path.basename(pathLocal))
             print("complete.")
 
-        html = abfBrowse.pages.parent.generateHtml(pathLocal)
-        return replaceLocalPath(html)
+        return abfBrowse.pages.parent.generateHtml(pathLocal)
     else:
         return f"ERROR: does not exist: [{pathLocal}.abf]"
 
 
-@app.route('/ABForigin/X/<path:pathUrl>')
+@app.route('/ABForigin/<path:pathUrl>')
 def showAbfOrigin(pathUrl):
     showRequest(pathUrl, request)
-    pathLocal = localPathFromUrl(pathUrl)
+    pathLocal = abfBrowse.getLocalPath(pathUrl)
     if os.path.isdir(pathLocal):
-        html = abfBrowse.pages.origin.generateHtml(pathLocal)
-        return replaceLocalPath(html)
+        return abfBrowse.pages.origin.generateHtml(pathLocal)
     else:
         return f"ERROR: does not exist [{pathLocal}]"
 
 
-@app.route('/ABFanalyze/X/<path:pathUrl>')
+@app.route('/ABFanalyze/<path:pathUrl>')
 def showAbfAnalyze(pathUrl):
     showRequest(pathUrl, request)
-    pathLocal = localPathFromUrl(pathUrl)
+    pathLocal = abfBrowse.getLocalPath(pathUrl)
     if os.path.isdir(pathLocal):
-        html = abfBrowse.pages.analyze.generateHtml(pathLocal)
-        return replaceLocalPath(html)
+        return abfBrowse.pages.analyze.generateHtml(pathLocal)
     else:
         return f"ERROR: does not exist [{pathLocal}]"
 
 
-@app.route('/ABFexperiment/X/<path:pathUrl>')
+@app.route('/ABFexperiment/<path:pathUrl>')
 def showAbfExperiment(pathUrl):
     showRequest(pathUrl, request)
-    pathLocal = localPathFromUrl(pathUrl)
+    pathLocal = abfBrowse.getLocalPath(pathUrl)
     if os.path.isdir(pathLocal):
-        html = abfBrowse.pages.experiment.generateHtml(pathLocal)
-        return replaceLocalPath(html)
+        return abfBrowse.pages.experiment.generateHtml(pathLocal)
     else:
         return f"ERROR: does not exist [{pathLocal}]"
 
