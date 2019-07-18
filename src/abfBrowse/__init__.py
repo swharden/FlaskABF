@@ -19,7 +19,7 @@ import os
 serverXdrivePath = R"D:\X_Drive"
 developerXdrivePath = R"X:"
 
-serverCommandFilePath = R"C:\Documents\GitHub\pyABFauto\dev\commands.txt"
+serverCommandFilePath = R"C:\Users\LabAdmin\Documents\GitHub\pyABFauto\dev\commands.txt"
 developerCommandFilePath = R"C:\Users\swharden\Documents\GitHub\pyABFauto\dev\commands.txt"
 
 ###############################################################################################
