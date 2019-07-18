@@ -12,4 +12,4 @@ import abfBrowse.pages.analyze
 import abfBrowse.pages.experiment
 import abfBrowse.pages.origin
 
-LOCAL_DRIVE_LETTER = "X"
+LOCAL_XRIVE_PREFIX = "D:\X_Drive"
