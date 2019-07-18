@@ -1,5 +1,6 @@
 import time
 import os
+import sys
 
 import flask
 from flask import request
@@ -98,9 +99,9 @@ def showAbfParent(pathUrl):
             print("Processing a change to cells.txt...")
             cellsFile = abfBrowse.CellsFile(request.form['abfFolderPath'])
             cellsFile.modify(
-                request.form['abfID'], 
-                request.form['colorCode'], 
-                request.form['comment'], 
+                request.form['abfID'],
+                request.form['colorCode'],
+                request.form['comment'],
                 "swhlab")
 
         if ('deleteGraphsForChildren' in request.args.keys()):
@@ -125,6 +126,7 @@ def showAbfOrigin(pathUrl):
     else:
         return f"ERROR: does not exist [{pathLocal}]"
 
+
 @app.route('/ABFanalyze/X/<path:pathUrl>')
 def showAbfAnalyze(pathUrl):
     showRequest(pathUrl, request)
@@ -134,6 +136,7 @@ def showAbfAnalyze(pathUrl):
         return replaceLocalPath(html)
     else:
         return f"ERROR: does not exist [{pathLocal}]"
+
 
 @app.route('/ABFexperiment/X/<path:pathUrl>')
 def showAbfExperiment(pathUrl):
@@ -147,4 +150,16 @@ def showAbfExperiment(pathUrl):
 
 
 if __name__ == '__main__':
-    app.run(host="192.168.1.225", port="8080")
+
+    if len(sys.argv) != 5:
+        print("WARNING: invalid command line arguments")
+        print("EXAMPLE USAGE: server.py -ip 192.168.0.123 -port 1234")
+        ip = "127.0.0.1"
+        port = 8080
+        print("using default IP and PORT")
+    else:
+        ip = sys.argv[2]
+        port = sys.argv[4]
+
+    print(f"Serving on: http://{ip}:{port}")
+    app.run(host=ip, port=port)
