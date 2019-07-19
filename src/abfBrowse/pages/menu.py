@@ -19,12 +19,21 @@ def menuDirectoryNavigator(currentPath):
         baseNames.append(os.path.basename(shorterPath))
     allPaths.reverse()
     baseNames.reverse()
-    baseNames[0] = "X:"  # TODO: pull this from somewhere else
+
+    # remove root drive letter
+    baseNames.pop(0)
+    allPaths.pop(0)
+
+    # remove folder (server only)
+    if baseNames[0] == "X_Drive":
+        baseNames.pop(0)
+        allPaths.pop(0)
 
     html = "<div class='menuFileBrowser'>"
     html += "<span class='title'>Project Browser</span><br>"
+    html += "<div style='color: blue;'>X:</div>"
     for i in range(len(allPaths)):
-        padding = "&nbsp;"*i
+        padding = "&nbsp;"*(i+1)
         url = abfBrowse.getUrl(allPaths[i])
         html += f"<div>{padding}<a href='/ABFviewer/{url}' target='_top'>{baseNames[i]}</a></div>"
     html += "<hr>"
