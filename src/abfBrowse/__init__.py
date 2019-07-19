@@ -19,8 +19,8 @@ import os
 serverXdrivePath = R"D:\X_Drive"
 developerXdrivePath = R"X:"
 
-serverCommandFilePath = R"C:\Users\LabAdmin\Documents\GitHub\pyABFauto\dev\commands.txt"
-developerCommandFilePath = R"C:\Users\swharden\Documents\GitHub\pyABFauto\dev\commands.txt"
+serverCommandFilePath = R"D:\X_Drive\Lab Documents\network\autoAnalysisFolders.txt"
+developerCommandFilePath = R"X:\Lab Documents\network\autoAnalysisFolders.txt"
 
 ###############################################################################################
 

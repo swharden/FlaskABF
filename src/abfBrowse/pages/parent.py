@@ -61,7 +61,7 @@ def pageFolderActions(abfFolder, parentNote):
 
     abfPath = os.path.join(abfFolder.path, parentNote.abfID) + ".abf"
     urlParent = "/ABFparent/" + abfBrowse.getUrl(abfPath)
-    urlAnalyze = "/ABFanalyze/" + abfBrowse.getUrl(abfPath)
+    urlAnalyze = "/ABFanalyze/" + abfBrowse.getUrl(abfFolder.path)
     urlExperiment = "/ABFexperiment/" + abfBrowse.getUrl(abfFolder.path)
 
     html = ""

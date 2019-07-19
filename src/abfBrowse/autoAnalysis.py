@@ -1,28 +1,18 @@
 import os
 import abfBrowse
 
-COMMANDS_FILE_OLD = R"X:\Lab Documents\network\htdocs\SWHLabPHP\recode\src\scripts\commands.txt"
+def addFolder(abfFolderLocalPath):
 
+    with open(abfBrowse.AUTOANALYSIS_COMMAND_FILE) as f:
+        analysisPaths = f.read()
 
-def addNewAbfsToCommandList(abfFolderLocalPath):
-    abfFolder = abfBrowse.AbfFolder(abfFolderLocalPath)
-    unanalyzedAbfs = abfFolder.abfsRequiringAnalysis()
+    if not abfFolderLocalPath in analysisPaths:
+        with open(abfBrowse.AUTOANALYSIS_COMMAND_FILE, 'a') as f:
+            f.write(abfFolderLocalPath+"\n")
+        print("  Added autoanalysis folder:", abfFolderLocalPath)
 
-    with open(COMMANDS_FILE_OLD) as f:
-        commands = f.read()
-    abfsToAdd = [x for x in unanalyzedAbfs if not x in commands]
-
-    newCommands = ""
-    for abfFileName in abfsToAdd:
-        print(f"adding {abfFileName} to command list...")
-        abfPath = os.path.join(abfFolderLocalPath, abfFileName)
-        abfPath = abfPath.replace("\\", "/")
-        newCommands += f"\nanalyze2 {abfPath}"
-
-    with open(COMMANDS_FILE_OLD, 'a') as f:
-        f.write(newCommands)
 
 def getAnalysisText():
-    with open(COMMANDS_FILE_OLD) as f:
+    with open(abfBrowse.AUTOANALYSIS_COMMAND_FILE) as f:
         commands = f.read()
     return commands
