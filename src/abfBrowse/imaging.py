@@ -5,7 +5,7 @@ from PIL import Image
 from PIL import ImageOps
 
 def convertTifToJpg(tifFilePath, jpgFilePath, autoContrast = True):
-    print("converting", os.path.basename(tifFilePath), "to jpg...")
+    print("  converting", os.path.basename(tifFilePath), "to jpg...")
     im = Image.open(tifFilePath)
     im = im.convert('RGB')
     if autoContrast:
