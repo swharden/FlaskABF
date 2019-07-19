@@ -10,8 +10,7 @@ import abfBrowse
 
 
 def showRequest(pathUrl, request):
-    print()
-    print(f"REQUEST: {pathUrl}")
+    print(f"REQUEST: {request.url}")
     for key in request.args.keys():
         print(f"GET['{key}']={request.args[key]}")
     for key in request.form.keys():
