@@ -59,9 +59,9 @@ def pageParentNotes(abfFolder, parentNote):
 def pageFolderActions(abfFolder, parentNote):
 
     abfPath = os.path.join(abfFolder.path, parentNote.abfID) + ".abf"
-    urlParent = "/ABFparent/" + abfPath.replace("\\", "/")
-    urlExperiment = "/ABFexperiment/" + abfFolder.path.replace("\\", "/")
-    urlAnalyze = "/ABFanalyze/" + abfFolder.path.replace("\\", "/")
+    urlParent = "/ABFparent/" + abfBrowse.getUrl(abfPath)
+    urlAnalyze = "/ABFanalyze/" + abfBrowse.getUrl(abfPath)
+    urlExperiment = "/ABFexperiment/" + abfBrowse.getUrl(abfFolder.path)
 
     html = ""
     html += "<div style='background-color: #F6F6F6; padding: .5em; color: gray'>"

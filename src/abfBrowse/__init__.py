@@ -24,6 +24,9 @@ developerCommandFilePath = R"C:\Users\swharden\Documents\GitHub\pyABFauto\dev\co
 
 ###############################################################################################
 
+# TODO: move all this stuff to a module
+
+# determine the local path to map the /X/ url to
 if os.path.exists(serverXdrivePath):
     LOCAL_XRIVE_PREFIX = serverXdrivePath
 elif os.path.exists(developerXdrivePath):
@@ -33,6 +36,8 @@ else:
 LOCAL_XRIVE_PREFIX = os.path.abspath(LOCAL_XRIVE_PREFIX)
 print("Path to X-Drive:", LOCAL_XRIVE_PREFIX)
 
+# determine the path to the autoanalysis commands file
+
 if os.path.exists(serverCommandFilePath):
     AUTOANALYSIS_COMMAND_FILE = serverCommandFilePath
 elif os.path.exists(developerCommandFilePath):
@@ -41,6 +46,7 @@ else:
     raise Exception("no local commands file found")
 AUTOANALYSIS_COMMAND_FILE = os.path.abspath(AUTOANALYSIS_COMMAND_FILE)
 print("Path to commands file:", AUTOANALYSIS_COMMAND_FILE)
+AUTOANALYSIS_ERROR_FILE = AUTOANALYSIS_COMMAND_FILE + ".error.txt"
 
 
 def getUrl(localPath):
@@ -48,7 +54,7 @@ def getUrl(localPath):
     url = url.replace(LOCAL_XRIVE_PREFIX, "X/")
     url = url.replace("\\", "/")
     if url.startswith("X//"):
-        url = url.replace("X//","X/")
+        url = url.replace("X//", "X/")
     return url
 
 
