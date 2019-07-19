@@ -81,6 +81,9 @@ class CellsFile:
                 self.cellNotes.append(line)
                 continue
 
+            if line.strip().count(" ") == 1:
+                line += " ?"
+
             if line.count(" ") >= 2:
                 abfID, color, comment = line.split(" ", 2)
                 if comment == "?":
@@ -115,6 +118,10 @@ class CellsFile:
 
     def modify(self, abfID, colorCode, comment, backupSubFolderName):
         self._backup(backupSubFolderName)
+
+        if comment.strip() == "":
+            comment = "?"
+
         print("cells file:", self.path)
         print("modifying note for:", abfID)
         print("setting color:", colorCode)

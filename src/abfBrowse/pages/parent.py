@@ -40,7 +40,8 @@ def pageParentNotes(abfFolder, parentNote):
     assert isinstance(parentNote, abfBrowse.cellsFile.CellNote)
 
     abfPath = os.path.join(abfFolder.path, parentNote.abfID) + ".abf"
-    url = "/ABFparent/" + abfPath.replace("\\", "/")
+    url = "/ABFparent/" + abfBrowse.getUrl(abfPath)
+    urlMenu = "/ABFmenu/" + abfBrowse.getUrl(os.path.dirname(abfPath))
 
     html = ""
     html += f"<form action='{url}' method='post' style='margin: 0px;'>"
@@ -50,7 +51,7 @@ def pageParentNotes(abfFolder, parentNote):
     html += getColorBoxesHTML(parentNote.colorCode)
     html += f"<input style='margin-top: 8px;' type='text' size='35' name='comment' value='{parentNote.comment}'> "
     html += f"<input type='submit' value='Submit'> "
-    html += "<a href=''>refresh menu</a>"
+    html += f"<a href='{urlMenu}' target='menu'>refresh menu</a>"
     html += "</div>"
     html += "</form>"
     return html
