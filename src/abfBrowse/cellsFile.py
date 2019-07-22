@@ -13,6 +13,7 @@ Methods in this file read/write cells notes files.
 import os
 import shutil
 import time
+import datetime
 
 COLORCODES = {
     "": "#FFFFFF",
@@ -117,7 +118,11 @@ class CellsFile:
             shutil.copy(self.path, backupFilePath)
 
     def modify(self, abfID, colorCode, comment, backupSubFolderName):
-        self._backup(backupSubFolderName)
+        if os.path.exists(self.path):
+            self._backup(backupSubFolderName)
+        else:
+            with open(self.path, 'w') as f:
+                f.write("# cells file started %s\n\n" % (datetime.datetime.now()))
 
         if comment.strip() == "":
             comment = "?"
@@ -140,7 +145,7 @@ class CellsFile:
         else:
             print(">> NEW LINE:", newCellsLine)
             lines.append(newCellsLine)
-        
+
         with open(self.path, 'w') as f:
             f.write("\n".join(lines))
         print(">> SAVED:", self.path)
