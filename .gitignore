@@ -102,3 +102,5 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+dev/testMenu.html
+dev/testParent.html
