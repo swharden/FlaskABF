@@ -42,9 +42,14 @@ def getUrl(localPath):
     url = url.replace("\\", "/")
     if url.startswith("X//"):
         url = url.replace("X//", "X/")
+        
     if LOCAL_XRIVE_PREFIX == "X:":
         # serve from an absolute file path rather than a URL
         url = url.replace("X", "X:", 1)
+    else:
+        # serve relative to server root
+        if not url.startswith("/"):
+            url = "/"+url
     return url
 
 
