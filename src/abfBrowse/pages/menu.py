@@ -37,7 +37,7 @@ def menuDirectoryNavigator(currentPath):
         url = abfBrowse.getUrl(allPaths[i])
         html += f"<div>{padding}<a href='/ABFviewer{url}' target='_top'>{baseNames[i]}</a></div>"
     html += "<hr>"
-    html += abfBrowse.htmlTools.copyButton("copy path", allPaths[i])
+    html += abfBrowse.htmlTools.copyButton("copy path", abfBrowse.getXdrivePath(allPaths[i]))
     html += abfBrowse.htmlTools.refreshButton()
     html += "</div>"
 
@@ -96,10 +96,8 @@ def menuFolderContents(abfFolder):
         for subFolder in subFolders:
             subFolder = os.path.basename(subFolder[:-1])
             # TODO: make this top level
-            url = os.path.join(abfFolder.path, subFolder)
-            url = url.replace(abfBrowse.LOCAL_XRIVE_PREFIX, "X/")
-            url = url.replace("\\", "/")
-            html += f"<div><a href='/ABFviewer/{url}' target='_top'>{subFolder}/</a></div>"
+            url = abfBrowse.getUrl(os.path.join(abfFolder.path, subFolder))
+            html += f"<div><a href='/ABFviewer{url}' target='_top'>{subFolder}/</a></div>"
         html += "</div>"
 
     if len(fileNames):

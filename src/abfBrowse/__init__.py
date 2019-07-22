@@ -59,3 +59,8 @@ def getLocalPath(url):
     localPath = url.replace("X", LOCAL_XRIVE_PREFIX, 1)
     localPath = os.path.abspath(localPath)
     return localPath
+
+def getXdrivePath(localPath):
+    localPath = os.path.abspath(localPath)
+    xDrivePath = localPath.replace(LOCAL_XRIVE_PREFIX, "X:")
+    return xDrivePath

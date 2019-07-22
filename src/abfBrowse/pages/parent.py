@@ -109,9 +109,10 @@ def pageParentChildAbfList(abfFolder, parentNote):
 
         # create the HTML row for this ABF
         html += f"<div class='abfInfoRow'>{abfFileName} "
-        html += abfBrowse.htmlTools.copyButton("copy path", abfPaths[i])
+        xDrivePath = abfBrowse.getXdrivePath(abfPaths[i])
+        html += abfBrowse.htmlTools.copyButton("copy path", xDrivePath)
         html += abfBrowse.htmlTools.copyButton(
-            "setpath", "setpath \"%s\"; " % (abfPaths[i]))
+            "setpath", "setpath \"%s\"; " % (xDrivePath))
         html += f"{abf.protocol}, {clampType} with {sweepCount} sweeps ({abf.sweepLengthSec} sec each, {duration} total)"
 
         # display messages at the end of the line
