@@ -51,12 +51,16 @@ def runAllTests(launchBrowser = True):
 
     print("ALL TESTS PASSED")
 
+def test_makepage_parent(parentAbfPath, launchBrowser = True):
+    testMenu(os.path.dirname(parentAbfPath))
+    testParent(parentAbfPath)
+    if launchBrowser:
+        os.system(PATH_HERE+"/testFrames.html")
 
 if __name__ == "__main__":
+    test_makepage_parent(R"X:\Data\AT1-Cre\nodose Chr2 injection NTS\data\18525042.abf")
+
     #runAllTests()
-    testMenu(R"X:\Data\SD\Piriform Oxytocin\00 pilot experiments\2019-01-08 stim TR L3P")
-    testParent(R"X:\Data\SD\Piriform Oxytocin\00 pilot experiments\2019-01-08 stim TR L3P\19110032.abf")
-    os.system(PATH_HERE+"/testFrames.html")
 
     #testAnalysis(R"X:\Data\SD\Piriform Oxytocin\00 pilot experiments\2019-01-08 stim TR L3P")
     #os.system(PATH_HERE+"/testAnalysis.html")

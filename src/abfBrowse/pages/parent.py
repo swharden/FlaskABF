@@ -135,7 +135,7 @@ def pageParentImages(abfFolder, parentNote):
             if analysisFile.startswith(child):
                 imagePath = abfFolder.analysisFolder+"/"+analysisFile
                 imageUrl = abfBrowse.getUrl(imagePath)
-                html += f"<a href='/{imageUrl}'><img class='analysisImage' src='/{imageUrl}'></a> "
+                html += f"<a href='{imageUrl}'><img src='/{imageUrl}' class='analysisImage'></a> "
     return html
 
 

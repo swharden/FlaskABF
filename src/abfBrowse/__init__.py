@@ -14,39 +14,26 @@ import abfBrowse.pages.origin
 
 import os
 
-### Customize these to reflect which computer you're using ####################################
-
-serverXdrivePath = R"D:\X_Drive"
-developerXdrivePath = R"X:"
-
-serverCommandFilePath = R"D:\X_Drive\Lab Documents\network\autoAnalysisFolders.txt"
-developerCommandFilePath = R"X:\Lab Documents\network\autoAnalysisFolders.txt"
-
 ###############################################################################################
 
 # TODO: move all this stuff to a module
 
-# determine the local path to map the /X/ url to
-if os.path.exists(serverXdrivePath):
-    LOCAL_XRIVE_PREFIX = serverXdrivePath
-elif os.path.exists(developerXdrivePath):
-    LOCAL_XRIVE_PREFIX = developerXdrivePath
+if os.path.exists(R"D:\X_Drive"):
+    # server computer
+    LOCAL_XRIVE_PREFIX = R"D:\X_Drive"
+    AUTOANALYSIS_COMMAND_FILE = R"D:\X_Drive\Lab Documents\network\autoAnalysisFolders.txt"
 else:
-    raise Exception("no local X-drive path found")
-LOCAL_XRIVE_PREFIX = os.path.abspath(LOCAL_XRIVE_PREFIX)
+    # developer computer
+    LOCAL_XRIVE_PREFIX = R"X:"
+    AUTOANALYSIS_COMMAND_FILE = R"X:\Lab Documents\network\autoAnalysisFolders.txt"
+
+assert os.path.exists(LOCAL_XRIVE_PREFIX)
+assert os.path.exists(AUTOANALYSIS_COMMAND_FILE)
+
 print("Path to X-Drive:", LOCAL_XRIVE_PREFIX)
-
-# determine the path to the autoanalysis commands file
-
-if os.path.exists(serverCommandFilePath):
-    AUTOANALYSIS_COMMAND_FILE = serverCommandFilePath
-elif os.path.exists(developerCommandFilePath):
-    AUTOANALYSIS_COMMAND_FILE = developerCommandFilePath
-else:
-    raise Exception("no local commands file found")
-AUTOANALYSIS_COMMAND_FILE = os.path.abspath(AUTOANALYSIS_COMMAND_FILE)
 print("Path to commands file:", AUTOANALYSIS_COMMAND_FILE)
-AUTOANALYSIS_ERROR_FILE = AUTOANALYSIS_COMMAND_FILE + ".error.txt"
+
+###############################################################################################
 
 
 def getUrl(localPath):
@@ -55,12 +42,15 @@ def getUrl(localPath):
     url = url.replace("\\", "/")
     if url.startswith("X//"):
         url = url.replace("X//", "X/")
+    if ":" in LOCAL_XRIVE_PREFIX:
+        url = url.replace("X", LOCAL_XRIVE_PREFIX, 1)
+    print(url)
     return url
 
 
 def getLocalPath(url):
     if not url.startswith("X/"):
         raise Exception("file path URLs must start with 'X/' or '/X/'")
-    localPath = url.replace("X/", LOCAL_XRIVE_PREFIX+"/", 1)
+    localPath = url.replace("X", LOCAL_XRIVE_PREFIX, 1)
     localPath = os.path.abspath(localPath)
     return localPath
