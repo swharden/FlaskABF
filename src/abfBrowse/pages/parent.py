@@ -40,8 +40,8 @@ def pageParentNotes(abfFolder, parentNote):
     assert isinstance(parentNote, abfBrowse.cellsFile.CellNote)
 
     abfPath = os.path.join(abfFolder.path, parentNote.abfID) + ".abf"
-    url = "/ABFparent/" + abfBrowse.getUrl(abfPath)
-    urlMenu = "/ABFmenu/" + abfBrowse.getUrl(os.path.dirname(abfPath))
+    url = "/ABFparent" + abfBrowse.getUrl(abfPath)
+    urlMenu = "/ABFmenu" + abfBrowse.getUrl(os.path.dirname(abfPath))
 
     html = ""
     html += f"<form action='{url}' method='post' style='margin: 0px;'>"
@@ -60,9 +60,9 @@ def pageParentNotes(abfFolder, parentNote):
 def pageFolderActions(abfFolder, parentNote):
 
     abfPath = os.path.join(abfFolder.path, parentNote.abfID) + ".abf"
-    urlParent = "/ABFparent/" + abfBrowse.getUrl(abfPath)
-    urlAnalyze = "/ABFanalyze/" + abfBrowse.getUrl(abfFolder.path)
-    urlExperiment = "/ABFexperiment/" + abfBrowse.getUrl(abfFolder.path)
+    urlParent = "/ABFparent" + abfBrowse.getUrl(abfPath)
+    urlAnalyze = "/ABFanalyze" + abfBrowse.getUrl(abfFolder.path)
+    urlExperiment = "/ABFexperiment" + abfBrowse.getUrl(abfFolder.path)
 
     html = ""
     html += "<div style='background-color: #F6F6F6; padding: .5em; color: gray'>"
