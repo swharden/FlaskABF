@@ -76,6 +76,7 @@ class AbfFolder:
 
     def _scanThisFolder(self):
         self.fileNames = sorted(os.listdir(self.path))
+        self.fileNames = [x for x in self.fileNames is not x.endswith(".rsv")]
         if "Thumbs.db" in self.fileNames:
             self.fileNames.remove("Thumbs.db")
 
