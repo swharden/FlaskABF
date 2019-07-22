@@ -63,7 +63,7 @@ def menuParentCellList(abfFolder):
             html += f"<br><div class='title'><b>{line}</b></div>"
         elif isinstance(line, abfBrowse.CellNote):
             abfUrl = abfBrowse.getUrl(abfFolder.path+"/"+line.abfID+".abf")
-            abfLink = f"<a href='/ABFparent/{abfUrl}' target='content' style='background-color: {line.color};'>{line.abfID}</a>"
+            abfLink = f"<a href='/ABFparent{abfUrl}' target='content' style='background-color: {line.color};'>{line.abfID}</a>"
             if line.abfID in abfFolder.abfList.family:
                 abfCount = f"({len(abfFolder.abfList.family[line.abfID])})"
             else:
@@ -74,7 +74,7 @@ def menuParentCellList(abfFolder):
     html += f"<br><div class='title'><b>Unknown:</b></div>"
     for unknownCell in unknownCells:
         abfUrl = abfBrowse.getUrl(abfFolder.path+"/"+unknownCell+".abf")
-        html += f"<div><a href='/ABFparent/{abfUrl}' target='content'>{unknownCell}</a></div>"
+        html += f"<div><a href='/ABFparent{abfUrl}' target='content'>{unknownCell}</a></div>"
 
     html += "</div>"
     return html
