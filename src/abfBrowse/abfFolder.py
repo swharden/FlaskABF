@@ -128,6 +128,9 @@ class AbfFolder:
         abfs = []
         for abfFileName in self.abfList.fileNamesAbf:
             analysisFiles = self.analysisFilesForAbf(abfFileName, skipTif=True)
+            rsvFileName = abfFileName.replace(".abf", ".rsv")
+            if rsvFileName in self.fileNames:
+                continue
             if len(analysisFiles) == 0:
                 abfs.append(abfFileName)
         return abfs
