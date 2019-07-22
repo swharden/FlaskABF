@@ -35,7 +35,7 @@ def menuDirectoryNavigator(currentPath):
     for i in range(len(allPaths)):
         padding = "&nbsp;"*(i+1)
         url = abfBrowse.getUrl(allPaths[i])
-        html += f"<div>{padding}<a href='/ABFviewer/{url}' target='_top'>{baseNames[i]}</a></div>"
+        html += f"<div>{padding}<a href='/ABFviewer{url}' target='_top'>{baseNames[i]}</a></div>"
     html += "<hr>"
     html += abfBrowse.htmlTools.copyButton("copy path", allPaths[i])
     html += abfBrowse.htmlTools.refreshButton()
@@ -45,8 +45,8 @@ def menuDirectoryNavigator(currentPath):
 
 
 def menuParentCellList(abfFolder):
-    urlExperiment = "/ABFexperiment/" + abfBrowse.getUrl(abfFolder.path)
-    urlOrigin = "/ABForigin/" + abfBrowse.getUrl(abfFolder.path)
+    urlExperiment = "/ABFexperiment" + abfBrowse.getUrl(abfFolder.path)
+    urlOrigin = "/ABForigin" + abfBrowse.getUrl(abfFolder.path)
     html = ""
     html += "<div class='menuEphysProject'>"
     html += "<span class='title'>Electrophysiology Project</span><br>"
