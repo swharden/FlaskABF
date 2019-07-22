@@ -5,20 +5,36 @@ from PIL import Image
 from PIL import ImageOps
 from PIL import ImageMath
 
-def convertTifToJpg(tifFilePath, jpgFilePath, autoContrast = True):
+
+def convertWithImageMagick(tifFilePath, jpgFilePath, autoContrast=True):
+    cmd = "convert \"%s\" \"%s\" " % (tifFilePath, jpgFilePath)
+    if autoContrast:
+        cmd = cmd.replace("convert", "convert -contrast-stretch .1%x.1%")
+    print(cmd)
+    os.system(cmd)
+
+
+def convertTifToJpg(tifFilePath, jpgFilePath, autoContrast=True):
     print("  converting", os.path.basename(tifFilePath), "to jpg...")
+
     im = Image.open(tifFilePath)
+
     if im.mode == "F":
         im = ImageMath.eval("convert(a/8, 'L')", a=im)
-    if autoContrast:
-        im = ImageOps.autocontrast(im,.05)
-    im = im.convert('RGB')
-    im.save(jpgFilePath)
-    return
+
+    if im.mode == "L":
+        print("  converting image with PIL")
+        if autoContrast:
+            im = ImageOps.autocontrast(im, .05)
+        im = im.convert('RGB')
+        im.save(jpgFilePath)
+    else:
+        print("  converting image with ImageMagick")
+        convertWithImageMagick(tifFilePath, jpgFilePath)
 
 
-# if __name__=="__main__":
+# if __name__ == "__main__":
 #     print("TEST")
-#     testIn = R"X:\Data\GLP-eYFP\round 3 - new experiment series\experiment 1 - electrical stimulation\19722000.tif"
+#     testIn = R"X:\Data\GLP-eYFP\round 3 - new experiment series\experiment 1 - electrical stimulation\19722000-fl2.tif"
 #     testOut = r"C:\Users\swharden\Documents\temp\test.jpg"
 #     convertTifToJpg(testIn, testOut)
