@@ -126,17 +126,24 @@ def pageParentChildAbfList(abfFolder, parentNote):
     html += "</div>"
     return html
 
+def getHtmlForImageFilePaths(abfFolder, filePaths):
+    html = ""
+    for imagePath in filePaths:
+        imagePath = abfFolder.analysisFolder+"/"+imagePath
+        imageUrl = abfBrowse.getUrl(imagePath)
+        html += f"<a href='{imageUrl}'><img src='{imageUrl}' class='analysisImage'></a> "
+    return html
 
 def pageParentImages(abfFolder, parentNote):
     assert isinstance(abfFolder, abfBrowse.AbfFolder)
     assert isinstance(parentNote, abfBrowse.cellsFile.CellNote)
     html = ""
     for child in abfFolder.abfList.family[parentNote.abfID]:
-        for analysisFile in abfFolder.analysisFiles:
-            if analysisFile.startswith(child):
-                imagePath = abfFolder.analysisFolder+"/"+analysisFile
-                imageUrl = abfBrowse.getUrl(imagePath)
-                html += f"<a href='{imageUrl}'><img src='{imageUrl}' class='analysisImage'></a> "
+        childImages = [x for x in abfFolder.analysisFiles if x.startswith(child)]
+        micrographs = [x for x in childImages if ".tif." in x.lower()]
+        analysisGraphs = [x for x in childImages if not ".tif." in x.lower()]
+        html += getHtmlForImageFilePaths(abfFolder, micrographs)
+        html += getHtmlForImageFilePaths(abfFolder, analysisGraphs)
     return html
 
 
