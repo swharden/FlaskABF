@@ -72,9 +72,10 @@ def menuParentCellList(abfFolder):
             html += f"<div>{abfLink} {abfCount} {abfComment}</div>"
 
     html += f"<br><div class='title'><b>Unknown:</b></div>"
-    for unknownCell in unknownCells:
-        abfUrl = abfBrowse.getUrl(abfFolder.path+"/"+unknownCell+".abf")
-        html += f"<div><a href='/ABFparent{abfUrl}' target='content'>{unknownCell}</a></div>"
+    for unknownCellID in unknownCells:
+        abfUrl = abfBrowse.getUrl(abfFolder.path+"/"+unknownCellID+".abf")
+        abfCount = len(abfFolder.abfList.family[unknownCellID])
+        html += f"<div><a href='/ABFparent{abfUrl}' target='content'>{unknownCellID}</a> ({abfCount})</div>"
 
     html += "</div>"
     return html
