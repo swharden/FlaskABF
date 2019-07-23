@@ -9,15 +9,22 @@ def generateHtml(pathLocal):
 
     abfFolder = abfBrowse.AbfFolder(pathLocal)
     experimentFilePath = os.path.join(pathLocal, "experiment.txt")
+    xDriveFilePath = abfBrowse.getXdrivePath(experimentFilePath)
     html = ""
+    html += "<div class='menuFileBrowser'>"
+    html += "<div class='title'>Experiment Notes</div>"
+    html += f"<div><code>{xDriveFilePath}</code></div>"
+    html += "<hr>"
+
+    html += "<div class='experimentTextBlock'>"
     if os.path.exists(experimentFilePath):
         with open(experimentFilePath) as f:
             experimentText = f.read()
-        experimentText = experimentText.replace("\n", "<br>")
-        html += "<h1>Experiment Notes</h1>"
-        html += f"<div><code>{experimentFilePath}</code></div>"
-        html += f"<div class='experimentTextBlock'>{experimentText}</div>"
+        html += experimentText.replace("\n", "<br>")
     else:
-        html += "<div>Experiment file does not exist:</div>"
-        html += f"<div><code>{experimentFilePath}</code></div>"
+        html += "file does not exist"
+    html += "<div>"
+
+    html += "</div>"
+
     return abfBrowse.htmlTools.htmlPageWrap(html)
