@@ -1,7 +1,7 @@
 import os
 import sys
 
-PATH_HERE = os.path.dirname(__file__)
+PATH_HERE = os.path.dirname(os.path.abspath(__file__))
 import testPaths
 
 sys.path.append(R"C:\Users\swharden\Documents\GitHub\FlaskABF\src")
@@ -58,7 +58,7 @@ def test_makepage_parent(parentAbfPath, launchBrowser = True):
         os.system(PATH_HERE+"/testFrames.html")
 
 if __name__ == "__main__":
-    test_makepage_parent(R"X:\Data\AT1-Cre\nodose Chr2 injection NTS\data\18525042.abf")
+    test_makepage_parent(R"X:\Data\GLP-eYFP\round 3 - new experiment series\experiment 1 - electrical stimulation\19722034.abf")
 
     #runAllTests()
 

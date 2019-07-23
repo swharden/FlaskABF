@@ -37,7 +37,8 @@ def menuDirectoryNavigator(currentPath):
         url = abfBrowse.getUrl(allPaths[i])
         html += f"<div>{padding}<a href='/ABFviewer{url}' target='_top'>{baseNames[i]}</a></div>"
     html += "<hr>"
-    html += abfBrowse.htmlTools.copyButton("copy path", abfBrowse.getXdrivePath(allPaths[i]))
+    html += abfBrowse.htmlTools.copyButton("copy path",
+                                           abfBrowse.getXdrivePath(allPaths[i]))
     html += abfBrowse.htmlTools.refreshButton()
     html += "</div>"
 
@@ -70,14 +71,15 @@ def menuParentCellList(abfFolder):
                 abfCount = f"(?)"
             abfComment = f"<span class='menuCellComments'>{line.comment}</span>"
             html += f"<div>{abfLink} {abfCount} {abfComment}</div>"
-
-    html += f"<br><div class='title'><b>Unknown:</b></div>"
-    for unknownCellID in unknownCells:
-        abfUrl = abfBrowse.getUrl(abfFolder.path+"/"+unknownCellID+".abf")
-        abfCount = len(abfFolder.abfList.family[unknownCellID])
-        html += f"<div><a href='/ABFparent{abfUrl}' target='content'>{unknownCellID}</a> ({abfCount})</div>"
-
     html += "</div>"
+
+    if len(unknownCells):
+        html += f"<div class='title'><b>Unknown:</b></div>"
+        for unknownCellID in unknownCells:
+            abfUrl = abfBrowse.getUrl(abfFolder.path+"/"+unknownCellID+".abf")
+            abfCount = len(abfFolder.abfList.family[unknownCellID])
+            html += f"<div><a href='/ABFparent{abfUrl}' target='content'>{unknownCellID}</a> ({abfCount})</div>"
+
     return html
 
 
@@ -91,19 +93,14 @@ def menuFolderContents(abfFolder):
     fileNames = [x for x in fileNames if "." in x]
 
     html = ""
-    if len(subFolders):
+    if len(subFolders) or len(fileNames):
         html += "<div class='menuFileBrowser'>"
-        html += "<div class='title'>Folders:</div>"
+        html += "<div class='title'>Folder Contents:</div>"
         for subFolder in subFolders:
             subFolder = os.path.basename(subFolder[:-1])
             # TODO: make this top level
             url = abfBrowse.getUrl(os.path.join(abfFolder.path, subFolder))
             html += f"<div><a href='/ABFviewer{url}' target='_top'>{subFolder}/</a></div>"
-        html += "</div>"
-
-    if len(fileNames):
-        html += "<div class='menuFileBrowser'>"
-        html += "<div class='title'>Files:</div>"
         for fileName in fileNames:
             url = abfBrowse.getUrl(abfFolder.path + "/" + fileName)
             html += f"<div><a href='/{url}' target='content'>{fileName}</a></div>"
@@ -121,6 +118,7 @@ def generateHtml(pathLocal):
     abfFolder = abfBrowse.AbfFolder(pathLocal)
 
     html = ""
+    # html += "<style>body {background-color: #DDD;}</style>"
     html += menuDirectoryNavigator(abfFolder.path)
     if len(abfFolder.abfList.fileNamesAbf):
         html += menuParentCellList(abfFolder)
