@@ -66,16 +66,23 @@ def pageFolderActions(abfFolder, parentNote):
 
     html = ""
     html += "<div style='background-color: #F6F6F6; padding: .5em; color: gray'>"
-    html += f"<span style='color: black;' class='title'>Actions:</span> "
 
+    html += "<code>"
     unanalyzedAbfs = abfFolder.abfsRequiringAnalysis()
     if len(unanalyzedAbfs):
-        html += f"<a href='{urlAnalyze}' class='abfAnalysisNeeded'>Analyze {len(unanalyzedAbfs)} new ABFs</a> | "
+        with open(abfBrowse.AUTOANALYSIS_COMMAND_FILE) as f:
+            commandText = f.read()
+        html += f"Folder contains {len(unanalyzedAbfs)} unanalyzed ABFs | "
+        if abfFolder.path in commandText:
+            html += "this folder is in the auto-analysis list | "
+        else:
+            html += f"<a href='{urlAnalyze}' class='abfAnalysisNeeded'>auto-analyze this folder</a> | "
     else:
         html += f"<a href='{urlAnalyze}' style='color: gray;'>No ABFs require analysis</a> | "
 
     html += f"<a href='{urlParent}?deleteGraphsForChildren' class='' style='color: gray;'>delete graphs</a> | "
     html += f"<a href='{urlExperiment}' class=''>experiment notes</a>"
+    html += "</code>"
     html += "</div>"
     return html
 
@@ -89,7 +96,6 @@ def pageParentChildAbfList(abfFolder, parentNote):
 
     html = ""
     html += "<div style='background-color: #EEE; padding: .5em;'>"
-    html += f"<span class='title'>CHILDREN:</span>"
     for i, abfFileName in enumerate(abfFileNames):
 
         # use pyABF to extract useful ABF information
