@@ -5,12 +5,10 @@ Code here relates to viewing/editing experiment.txt
 import os
 import abfBrowse
 
-def generateHtml(pathLocal):
+def getNotesForm(experimentFilePath):
 
-    abfFolder = abfBrowse.AbfFolder(pathLocal)
-    experimentFilePath = os.path.join(pathLocal, "experiment.txt")
     xDriveFilePath = abfBrowse.getXdrivePath(experimentFilePath)
-    
+
     if os.path.exists(experimentFilePath):
         with open(experimentFilePath) as f:
             experimentText = f.read()
@@ -23,7 +21,6 @@ def generateHtml(pathLocal):
         experimentText += "Drugs: \n"
 
     html = ""
-    html += "<div class='title' style='font-size: 150%;'>Experiment Notes</div>"
     html += f"<div><code>{xDriveFilePath}</code></div>"
     #html += "<div><i>Lasted edited on 2019-07-24 at 10:12 am (12.7 days ago)</i></div>"
 
@@ -32,6 +29,21 @@ def generateHtml(pathLocal):
     html += f"<textarea name='experimentText' class='editBox' style='margin-top: 20px;'>{experimentText}</textarea>"
     html += "<input class='submitButton' type='submit' value='SAVE' style='margin-top: 20px;' disabled>"
 
-    html = f"<div style='padding: 20px;'>{html}</div>"
+    return html
 
+
+def generateHtml(pathLocal):
+
+    abfFolder = abfBrowse.AbfFolder(pathLocal)
+    experimentFilePath = os.path.join(pathLocal, "experiment.txt")
+    
+
+    html = "<div class='title' style='font-size: 150%;'>Experiment Notes</div>"
+    
+    if len(abfFolder.abfList.abfIDs):
+        html += getNotesForm(experimentFilePath)
+    else:
+        html += '<i>this is not an ABF folder</i>'
+
+    html = f"<div style='padding: 20px;'>{html}</div>"
     return abfBrowse.htmlTools.htmlPageWrap(html)
