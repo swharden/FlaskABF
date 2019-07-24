@@ -103,7 +103,7 @@ def menuFolderContents(abfFolder):
             html += f"<div><a href='/ABFviewer{url}' target='_top'>{subFolder}/</a></div>"
         for fileName in fileNames:
             url = abfBrowse.getUrl(abfFolder.path + "/" + fileName)
-            html += f"<div><a href='/{url}' target='content'>{fileName}</a></div>"
+            html += f"<div><a href='{url}' target='content'>{fileName}</a></div>"
         html += "</div>"
 
     return html
