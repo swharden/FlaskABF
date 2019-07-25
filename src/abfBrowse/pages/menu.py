@@ -118,7 +118,7 @@ def generateHtml(pathLocal):
     abfFolder = abfBrowse.AbfFolder(pathLocal)
 
     html = ""
-    # html += "<style>body {background-color: #DDD;}</style>"
+    #html += "<style>body {background-color: #FAFAFA;}</style>"
     html += menuDirectoryNavigator(abfFolder.path)
     if len(abfFolder.abfList.fileNamesAbf):
         html += menuParentCellList(abfFolder)
