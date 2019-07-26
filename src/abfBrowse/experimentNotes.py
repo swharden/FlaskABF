@@ -21,7 +21,7 @@ class ExperimentNotes:
             s = f"Lasted edited on {modDT.date()} at {modDT.time()} ({round(daysAgo, 2)} days ago)"
             return s
         else:
-            return "file does not exist"
+            return "Experiment notes files does not exist yet"
 
     def getText(self):
         if os.path.exists(self.path):
