@@ -4,6 +4,7 @@ from abfBrowse.cellsFile import CellsFile, CellNote
 import abfBrowse.htmlTools
 import abfBrowse.autoAnalysis
 import abfBrowse.imaging
+import abfBrowse.experimentNotes
 
 import abfBrowse.pages.frames
 import abfBrowse.pages.menu

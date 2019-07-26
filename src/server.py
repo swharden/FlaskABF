@@ -118,11 +118,14 @@ def showAbfAnalyze(pathUrl):
         return f"ERROR: does not exist [{pathLocal}]"
 
 
-@app.route('/ABFexperiment/<path:pathUrl>')
+@app.route('/ABFexperiment/<path:pathUrl>', methods=['POST', 'GET'])
 def showAbfExperiment(pathUrl):
     showRequest(pathUrl, request)
     pathLocal = abfBrowse.getLocalPath(pathUrl)
     if os.path.isdir(pathLocal):
+        if ('experimentText' in request.form.keys()):
+            exp = abfBrowse.experimentNotes.ExperimentNotes(pathLocal)
+            exp.write(request.form['experimentText'])
         return abfBrowse.pages.experiment.generateHtml(pathLocal)
     else:
         return f"ERROR: does not exist [{pathLocal}]"
