@@ -62,9 +62,9 @@ def test_makepage_experiment(parentAbfPath, launchBrowser = True):
     os.system(PATH_HERE+"/testExperiment.html")
 
 if __name__ == "__main__":
-    #test_makepage_parent(R"X:\Data\GLP-eYFP\round 3 - new experiment series\experiment 1 - electrical stimulation\19722000.abf")
+    test_makepage_parent(R"X:\Data\GLP-eYFP\round 2 - ChR2 in nodose\abfs\19517000.abf")
     
-    test_makepage_experiment(R"X:\Data\GLP-eYFP\round 2 - ChR2 in nodose\abfs")
+    #test_makepage_experiment(R"X:\Data\GLP-eYFP\round 2 - ChR2 in nodose\abfs")
 
     #runAllTests()
 

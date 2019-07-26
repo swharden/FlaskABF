@@ -58,27 +58,30 @@ def menuParentCellList(abfFolder):
     cells = abfBrowse.CellsFile(abfFolder.path)
     unknownCells = cells.getUnknownCells(abfFolder.abfList.family.keys())
 
-    html += "<div class='menuCellList'>"
-    for line in cells.cellNotes:
-        if isinstance(line, str):
-            html += f"<br><div class='title'><b>{line}</b></div>"
-        elif isinstance(line, abfBrowse.CellNote):
-            abfUrl = abfBrowse.getUrl(abfFolder.path+"/"+line.abfID+".abf")
-            abfLink = f"<a href='/ABFparent{abfUrl}' target='content' style='background-color: {line.color};'>{line.abfID}</a>"
-            if line.abfID in abfFolder.abfList.family:
-                abfCount = f"({len(abfFolder.abfList.family[line.abfID])})"
-            else:
-                abfCount = f"(?)"
-            abfComment = f"<span class='menuCellComments'>{line.comment}</span>"
-            html += f"<div>{abfLink} {abfCount} {abfComment}</div>"
-    html += "</div>"
+    if len(cells.cellNotes):
+        html += "<div class='menuCellList'>"
+        for line in cells.cellNotes:
+            if isinstance(line, str):
+                html += f"<br><div class='title'><b>{line}</b></div>"
+            elif isinstance(line, abfBrowse.CellNote):
+                abfUrl = abfBrowse.getUrl(abfFolder.path+"/"+line.abfID+".abf")
+                abfLink = f"<a href='/ABFparent{abfUrl}' target='content' style='background-color: {line.color};'>{line.abfID}</a>"
+                if line.abfID in abfFolder.abfList.family:
+                    abfCount = f"({len(abfFolder.abfList.family[line.abfID])})"
+                else:
+                    abfCount = f"(?)"
+                abfComment = f"<span class='menuCellComments'>{line.comment}</span>"
+                html += f"<div>{abfLink} {abfCount} {abfComment}</div>"
+        html += "</div>"
 
     if len(unknownCells):
-        html += f"<div class='title'><b>Unknown:</b></div>"
+        html += "<div class='menuCellList'>"
+        html += f"<div class='title'><b>Unlabeled:</b></div>"
         for unknownCellID in unknownCells:
             abfUrl = abfBrowse.getUrl(abfFolder.path+"/"+unknownCellID+".abf")
             abfCount = len(abfFolder.abfList.family[unknownCellID])
             html += f"<div><a href='/ABFparent{abfUrl}' target='content'>{unknownCellID}</a> ({abfCount})</div>"
+        html += "</div>"
 
     return html
 
@@ -118,7 +121,7 @@ def generateHtml(pathLocal):
     abfFolder = abfBrowse.AbfFolder(pathLocal)
 
     html = ""
-    #html += "<style>body {background-color: #FAFAFA;}</style>"
+    # html += "<style>body {background-color: #FAFAFA;}</style>"
     html += menuDirectoryNavigator(abfFolder.path)
     if len(abfFolder.abfList.fileNamesAbf):
         html += menuParentCellList(abfFolder)
