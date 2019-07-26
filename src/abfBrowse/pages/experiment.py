@@ -11,8 +11,8 @@ def getNotesForm(pathLocal):
     expNotes = abfBrowse.experimentNotes.ExperimentNotes(pathLocal)
     xDriveFilePath = abfBrowse.getXdrivePath(expNotes.path)
     experimentText = expNotes.getText()
-    if experimentText == "":
-        experimentText += "## Experiment Notes ##\n"
+    if not experimentText:
+        experimentText = "## Experiment Notes ##\n"
         experimentText += "Goal: \n"
         experimentText += "Animal: \n"
         experimentText += "Internal: \n"
