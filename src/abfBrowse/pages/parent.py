@@ -98,6 +98,11 @@ def pageParentChildAbfList(abfFolder, parentNote):
     html += "<div style='background-color: #EEE; padding: .5em;'>"
     for i, abfFileName in enumerate(abfFileNames):
 
+        # don't list ABFs currently being recorded
+        rsvFilePath = os.path.splitext(abfPaths[i])[0]+".rsv"
+        if os.path.exists(rsvFilePath):
+            continue
+
         # use pyABF to extract useful ABF information
         abf = pyabf.ABF(abfPaths[i], loadData=False)
         clampType = "VC" if abf.adcUnits[0] == "pA" else "IC"
@@ -132,6 +137,7 @@ def pageParentChildAbfList(abfFolder, parentNote):
     html += "</div>"
     return html
 
+
 def getHtmlForImageFilePaths(abfFolder, filePaths):
     html = ""
     for imagePath in filePaths:
@@ -140,12 +146,14 @@ def getHtmlForImageFilePaths(abfFolder, filePaths):
         html += f"<a href='{imageUrl}'><img src='{imageUrl}' class='analysisImage'></a> "
     return html
 
+
 def pageParentImages(abfFolder, parentNote):
     assert isinstance(abfFolder, abfBrowse.AbfFolder)
     assert isinstance(parentNote, abfBrowse.cellsFile.CellNote)
     html = ""
     for child in abfFolder.abfList.family[parentNote.abfID]:
-        childImages = [x for x in abfFolder.analysisFiles if x.startswith(child)]
+        childImages = [
+            x for x in abfFolder.analysisFiles if x.startswith(child)]
         micrographs = [x for x in childImages if ".tif." in x.lower()]
         analysisGraphs = [x for x in childImages if not ".tif." in x.lower()]
         html += getHtmlForImageFilePaths(abfFolder, micrographs)
