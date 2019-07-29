@@ -31,6 +31,7 @@ def showFileOrFolder(pathUrl):
     """
     #showRequest(pathUrl, request)
     pathLocal = abfBrowse.getLocalPath("X/"+pathUrl)
+    print("  serving", os.path.basename(pathLocal))
     if os.path.isdir(pathLocal):
         return f"directory index of [{pathLocal}]"
     elif os.path.isfile(pathLocal):
