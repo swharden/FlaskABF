@@ -27,9 +27,9 @@ def showIndex():
 @app.route('/X/<path:pathUrl>')
 def showFileOrFolder(pathUrl):
     """
-    Display the front page
+    Send the binary content of a file on the X drive
     """
-    showRequest(pathUrl, request)
+    #showRequest(pathUrl, request)
     pathLocal = abfBrowse.getLocalPath("X/"+pathUrl)
     if os.path.isdir(pathLocal):
         return f"directory index of [{pathLocal}]"
