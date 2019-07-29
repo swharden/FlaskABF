@@ -66,13 +66,13 @@ def menuParentCellList(abfFolder):
                 html += f"<br><div class='title'><b>{line}</b></div>"
             elif isinstance(line, abfBrowse.CellNote):
                 abfUrl = abfBrowse.getUrl(abfFolder.path+"/"+line.abfID+".abf")
+                activeCellMarkerId += 1
                 abfLink = f"<a href='/ABFparent{abfUrl}' target='content' onclick='setClicked({activeCellMarkerId})' style='background-color: {line.color};'>{line.abfID}</a>"
                 if line.abfID in abfFolder.abfList.family:
                     abfCount = f"({len(abfFolder.abfList.family[line.abfID])})"
                 else:
                     abfCount = f"(?)"
                 abfComment = f"<span class='menuCellComments'>{line.comment}</span>"
-                activeCellMarkerId += 1
                 activeCellMarker = f"<span class='abftick' style='visibility: hidden' id='{activeCellMarkerId}'>»</span>"
                 html += f"<div>{activeCellMarker}{abfLink} {abfCount} {abfComment}</div>"
         html += "</div>"
