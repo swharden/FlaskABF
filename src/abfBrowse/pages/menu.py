@@ -57,6 +57,7 @@ def menuParentCellList(abfFolder):
 
     cells = abfBrowse.CellsFile(abfFolder.path)
     unknownCells = cells.getUnknownCells(abfFolder.abfList.family.keys())
+    activeCellMarkerId = 0
 
     if len(cells.cellNotes):
         html += "<div class='menuCellList'>"
@@ -65,13 +66,15 @@ def menuParentCellList(abfFolder):
                 html += f"<br><div class='title'><b>{line}</b></div>"
             elif isinstance(line, abfBrowse.CellNote):
                 abfUrl = abfBrowse.getUrl(abfFolder.path+"/"+line.abfID+".abf")
-                abfLink = f"<a href='/ABFparent{abfUrl}' target='content' style='background-color: {line.color};'>{line.abfID}</a>"
+                abfLink = f"<a href='/ABFparent{abfUrl}' target='content' onclick='setClicked({activeCellMarkerId}) style='background-color: {line.color};'>{line.abfID}</a>"
                 if line.abfID in abfFolder.abfList.family:
                     abfCount = f"({len(abfFolder.abfList.family[line.abfID])})"
                 else:
                     abfCount = f"(?)"
                 abfComment = f"<span class='menuCellComments'>{line.comment}</span>"
-                html += f"<div>{abfLink} {abfCount} {abfComment}</div>"
+                activeCellMarkerId += 1
+                activeCellMarker = f"<span class='abftick' style='visibility: hidden' id='{activeCellMarkerId}'>»</span>"
+                html += f"<div>{activeCellMarker}{abfLink} {abfCount} {abfComment}</div>"
         html += "</div>"
 
     if len(unknownCells):
@@ -80,7 +83,9 @@ def menuParentCellList(abfFolder):
         for unknownCellID in unknownCells:
             abfUrl = abfBrowse.getUrl(abfFolder.path+"/"+unknownCellID+".abf")
             abfCount = len(abfFolder.abfList.family[unknownCellID])
-            html += f"<div><a href='/ABFparent{abfUrl}' target='content'>{unknownCellID}</a> ({abfCount})</div>"
+            activeCellMarkerId += 1
+            activeCellMarker = f"<span class='abftick' style='visibility: hidden' id='{activeCellMarkerId}'>»</span>"
+            html += f"<div>{activeCellMarker}<a href='/ABFparent{abfUrl}' target='content' onclick='setClicked({activeCellMarkerId})'>{unknownCellID}</a> ({abfCount})</div>"
         html += "</div>"
 
     return html

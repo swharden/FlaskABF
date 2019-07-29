@@ -48,6 +48,25 @@ def htmlPageWrap(htmlContent):
     }
 </script>
 
+<script>
+	function setClicked(id) {
+		elems = document.getElementsByClassName('abflink');
+		for (i = 0; i < elems.length; i++) {
+			elems[i].style.fontWeight="normal";
+			if (elems[i].id==id) {
+				elems[i].style.fontWeight="bold";
+			}
+		}
+		elems = document.getElementsByClassName('abftick');
+		for (i = 0; i < elems.length; i++) {
+			elems[i].style.visibility="hidden";
+			if (elems[i].id==id) {
+				elems[i].style.visibility="visible";
+			}
+		}
+	}
+</script>
+
 </head>
 <body>
 %s
