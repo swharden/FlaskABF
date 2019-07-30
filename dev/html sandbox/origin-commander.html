@@ -1,0 +1,30 @@
+<html>
+
+<head>
+    <script>
+
+        function test() {
+
+            abf1 = ["path1.abf", "protocol1", "comment1"];
+            abf2 = ["path2.abf", "protocol2", "comment2"];
+            abf3 = ["path3.abf", "protocol3", "comment3"];
+            var abfs = [abf1, abf2, abf3];
+
+            var commands = "";
+            for (var i=0; i<abfs.length; i++){
+                abf = abfs[i];
+                commands += abf;
+                commands += "<br>";
+            }
+            
+            document.getElementById("test").innerHTML = commands;
+        }
+
+    </script>
+</head>
+
+<body onload="test()">
+    <div id="test"></div>
+</body>
+
+</html>

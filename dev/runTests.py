@@ -40,6 +40,12 @@ def testExperiment(folderPath):
     with open(os.path.abspath(PATH_HERE + "/testExperiment.html"), 'w') as f:
         f.write(html)
 
+def testOrigin(folderPath):
+    print(f"testing origin page for [{folderPath}]")
+    html = abfBrowse.pages.origin.generateHtml(folderPath)
+    with open(os.path.abspath(PATH_HERE + "/testOrigin.html"), 'w') as f:
+        f.write(html)
+
 def runAllTests(launchBrowser = True):
 
     for testFolder in testPaths.folders:
@@ -61,8 +67,15 @@ def test_makepage_experiment(parentAbfPath, launchBrowser = True):
     testExperiment(os.path.dirname(parentAbfPath))
     os.system(PATH_HERE+"/testExperiment.html")
 
+def test_makepage_origin(parentAbfPath, launchBrowser = True):
+    testOrigin(parentAbfPath)
+    os.system(PATH_HERE+"/testOrigin.html")
+
 if __name__ == "__main__":
-    test_makepage_parent(R"X:\Data\GLP-eYFP\round 2 - ChR2 in nodose\abfs\19517000.abf")
+
+    test_makepage_origin(R"X:\Data\AT1-Cre\MPO Chr2 PVN\abfs")
+
+    #test_makepage_parent(R"X:\Data\GLP-eYFP\round 2 - ChR2 in nodose\abfs\19517000.abf")
     
     #test_makepage_experiment(R"X:\Data\GLP-eYFP\round 2 - ChR2 in nodose\abfs")
 

@@ -1,0 +1,146 @@
+<html>
+<head>
+<style>
+body{
+    font-family: Verdana, sans-serif;
+    margin: 0px;
+}
+
+a {
+    text-decoration: none;
+    color: blue;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.title{
+    font-family: "Arial Narrow", Arial, sans-serif;
+    font-weight: bold;
+}
+
+.smallButton{
+    font-family: monospace;
+    font-size: 80%;
+    border-style: none;
+    border: 1px solid #CCC;
+    background-color: white;
+    color: black;
+}
+
+/***********************************************************
+MENU 
+***********************************************************/
+
+.menuFileBrowser{
+    font-family: monospace;
+    background-color: #EEE;
+    padding: 5px;
+    white-space: nowrap;
+}
+
+.menuEphysProject{
+    font-family: monospace;
+    padding: 5px;
+    white-space: nowrap;
+}
+
+.menuCellList{
+    font-family: monospace;
+    padding: 5px;
+    white-space: nowrap;
+    margin-bottom: 1em;
+}
+
+.menuCellComments{
+    color: #AAAAAA;
+}
+
+/***********************************************************
+PARENT 
+***********************************************************/
+.analysisImage{
+    margin: 10px;
+    border: 1px solid black;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, .3);
+    height: 200px;
+}
+
+.abfInfoRow{
+    font-family: monospace;
+    color: gray;
+    padding-top: .2em;
+}
+
+.abfInfoComment{
+    color: black;
+    background-color: #FFFFAA;
+    padding-left: .5em;
+    padding-right: .5em;
+}
+
+.abfInfoWarning{
+    color: white;
+    background-color: rgb(255, 0, 0);
+    padding-left: .5em;
+    padding-right: .5em;
+}
+
+.abfAnalysisNeeded{
+    background-color: #FFFFAA; 
+    border: 1px solid #d6d690;
+    padding: 5px 8px 5px 8px;
+    font-weight: bold;
+}
+
+.experimentTextBlock{
+    margin: 20px;
+    padding: 10px;
+    background-color: #E4E4E4;
+}
+
+.editBox{
+    width: 100%; 
+    height: 400px; 
+    background-color: #EEE; 
+    border: 1px solid #DDD;
+    padding: 10px;
+}
+</style>
+
+<script>
+    function copyToClipboard(elementId) {
+    var input = document.createElement("input");
+    document.body.appendChild(input);
+    input.value=document.getElementById(elementId).innerText;
+    input.select();
+    document.execCommand("copy");
+    document.body.removeChild(input);
+    }
+</script>
+
+<script>
+	function setClicked(id) {
+		elems = document.getElementsByClassName('abflink');
+		for (i = 0; i < elems.length; i++) {
+			elems[i].style.fontWeight="normal";
+			if (elems[i].id==id) {
+				elems[i].style.fontWeight="bold";
+			}
+		}
+		elems = document.getElementsByClassName('abftick');
+		for (i = 0; i < elems.length; i++) {
+			elems[i].style.visibility="hidden";
+			if (elems[i].id==id) {
+				elems[i].style.visibility="visible";
+			}
+		}
+	}
+</script>
+
+</head>
+<body>
+This section is under development. Eventually it will let you create custom copy/paste blocks of Origin commands.<hr>java data
+</body>
+</html>
