@@ -93,9 +93,7 @@ function cmdAdd(command) {
 
 function createCommands() {
 
-    //document.getElementById("cellListBlock").style.visibility = "collapse";
-    //document.getElementById("originCommandBlock").style.visibility = "collapse";
-
+    document.getElementById("cellListBlock").style.visibility = "collapse";
 
     commands = document.getElementById("cellList").innerHTML
     populateProtocolList(commands);

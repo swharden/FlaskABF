@@ -75,8 +75,6 @@ def generateHtml(pathLocal):
     html += readOriginCommandScript()
     html += specialHtml
     if len(abfFolder.abfList.abfIDs):
-        html += "<div style='font-size: 150%; font-weight: bold;'>Origin Command Generator</div>"
-        html += f"<div style='background-color: #EEE; padding: 10px; margin: 10px;' id='originCommandBlock'><pre id='originCommands'></pre></div>"
         html += getJavaBlock(abfFolder)
     else:
         html += "this is not an ABF folder..."
