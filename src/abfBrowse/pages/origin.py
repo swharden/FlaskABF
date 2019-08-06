@@ -8,7 +8,6 @@ specialHtml = """
 <script src="file:///C:/Users/swharden/Documents/GitHub/FlaskABF/dev/originCommands.js"></script>
 
 <div style="font-size: 150%; font-weight: bold;">Origin Command Generator</div>
-<div><i>this page is being actively developed...</i></div>
 
 <div style='margin: 10px; padding: 10px; background-color: #FFFFAA; line-height: 150%;'>
 
