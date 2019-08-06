@@ -69,11 +69,12 @@ def test_makepage_experiment(parentAbfPath, launchBrowser = True):
 
 def test_makepage_origin(parentAbfPath, launchBrowser = True):
     testOrigin(parentAbfPath)
-    os.system(PATH_HERE+"/testOrigin.html")
+    if launchBrowser:
+        os.system(PATH_HERE+"/testOrigin.html")
 
 if __name__ == "__main__":
 
-    test_makepage_origin(R"X:\Data\AT1-Cre\MPO Chr2 PVN\abfs")
+    test_makepage_origin(R"X:\Data\OTR-Cre\VTA inj ChR2 NAc response\abfs", False)
 
     #test_makepage_parent(R"X:\Data\GLP-eYFP\round 2 - ChR2 in nodose\abfs\19517000.abf")
     
