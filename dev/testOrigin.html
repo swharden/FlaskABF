@@ -141,78 +141,207 @@ PARENT
 
 </head>
 <body>
-<div style='margin: 10px;'><div style='font-size: 150%; font-weight: bold;'>Origin Command Generator</div><div><i>this page is being actively developed...</i></div><div style='color: #AAA; background-color: #EEE; padding: 10px;'><pre id='cellList'># DATA FOR JAVASCRIPT
+<div style='margin: 10px;'><script>window.onload = function() {
+    createCommands();
+}
+
+function removeUselessLines(commands) {
+    // remove empty lines and lines that start with #
+    lines = commands.split("\n")
+    out = ""
+    for (i = 0; i < lines.length; i++) {
+        if (lines[i].startsWith("#"))
+            continue;
+        out += lines[i] + "\n";
+    }
+    return out;
+}
+
+function replaceGroupLines(commands) {
+    // replaces lines that start with "GROUP" with modifyNames or modifyTags commands
+    modifyNames = document.getElementById("modifyNames").checked
+    modifyTags = document.getElementById("modifyTags").checked
+
+    lines = commands.split("\n")
+    out = ""
+    for (i = 0; i < lines.length; i++) {
+        if (lines[i].startsWith("GROUP: ")) {
+            name = lines[i].replace("GROUP: ", "").trim();
+            lines[i] = "\n";
+            if (modifyNames)
+                lines[i] += `modifyNames "${name}"; `;
+            if (modifyTags)
+                lines[i] += `modifyTags "${name}"; `;
+        }
+        out += lines[i] + "\n";
+    }
+    return out;
+}
+
+function replaceAbfLines(commands) {
+    // replace lines that start with "ABF" with setpath then a custom command
+    analysisCommand = document.getElementById("customCommand").value;
+    protocolMatch = document.getElementById("protocolList").value;
+    lines = commands.split("\n")
+    out = ""
+    for (i = 0; i < lines.length; i++) {
+        if (lines[i].startsWith("ABF: ")) {
+            line = lines[i].replace("ABF: ", "").trim().split(", ");
+            abf = line[0];
+            protocol = line[1];
+            comments = line[2];
+            if (protocol.includes(protocolMatch)) {
+                out += `setpath "${abf}"; ${analysisCommand}\n`;
+            }
+        } else {
+            out += lines[i] + "\n";
+        }
+    }
+    return out;
+}
+
+function populateProtocolList(commands) {
+    // make the combobox show all protocols
+
+    lines = commands.split("\n")
+    var protocols = [];
+    var protocolList = document.getElementById("protocolList");
+
+    if (protocolList.options.length)
+        return;
+
+    for (i = 0; i < lines.length; i++) {
+        if (lines[i].startsWith("ABF: ")) {
+            line = lines[i].replace("ABF: ", "").trim().split(", ");
+            abf = line[0];
+            protocol = line[1].replace(",", "").trim();
+            comments = line[2];
+            if (!protocols.includes(protocol)) {
+                protocols.push(protocol);
+                var option = document.createElement("option");
+                option.text = protocol;
+                protocolList.add(option);
+            }
+        }
+    }
+}
+
+function cmdAdd(command) {
+
+    if (command == "clear")
+        document.getElementById("customCommand").value = "";
+    else
+        document.getElementById("customCommand").value = document.getElementById("customCommand").value + command + "; ";
+}
+
+function createCommands() {
+
+    //document.getElementById("cellListBlock").style.visibility = "collapse";
+    //document.getElementById("originCommandBlock").style.visibility = "collapse";
+
+
+    commands = document.getElementById("cellList").innerHTML
+    populateProtocolList(commands);
+    commands = removeUselessLines(commands)
+    commands = replaceGroupLines(commands)
+    commands = replaceAbfLines(commands)
+    commands = commands.trim();
+    document.getElementById("originCommands").innerHTML = commands;
+}</script>
+<div style="margin: 10px;">
+<script src="file:///C:/Users/swharden/Documents/GitHub/FlaskABF/dev/originCommands.js"></script>
+
+<div style="font-size: 150%; font-weight: bold;">Origin Command Generator</div>
+<div><i>this page is being actively developed...</i></div>
+
+<div style='margin: 10px; padding: 10px; background-color: #FFFFAA; line-height: 150%;'>
+
+modify:
+<input type="checkbox" id="modifyNames" onchange="createCommands();" checked> names,
+<input type="checkbox" id="modifyTags" onchange="createCommands();"> tags
+<br> protocol: <select id="protocolList" onchange="createCommands();"></select>
+
+<br> analysis command: <input id='customCommand' oninput="createCommands();" size="40">
+<button type="button" onclick="cmdAdd('memtest');createCommands();">memtest</button>
+<button type="button" onclick="cmdAdd('getstats');createCommands();">getstats</button>
+<button type="button" onclick="cmdAdd('cjfmini');createCommands();">cjfmini</button>
+<button type="button" onclick="cmdAdd('clear');createCommands();">clear</button>
+
+</div>
+
+<textarea id="originCommands" style='margin: 10px; padding: 10px; width: 95%; height: 80%; background-color: #EEE;'></textarea>
+<div style='font-size: 150%; font-weight: bold;'>Origin Command Generator</div><div style='background-color: #EEE; padding: 10px; margin: 10px;' id='originCommandBlock'><pre id='originCommands'></pre></div><div style='color: #AAA; background-color: #EEE; padding: 10px; margin: 10px;' id='cellListBlock'><pre id='cellList'># DATA FOR JAVASCRIPT
 GROUP: OM65 
-2019_07_30_0000, 0201 memtest, 
-2019_07_30_0001, 0202 IV dual [-110 to -50], 
-2019_07_30_0002, 0111 AP ramp, 
-2019_07_30_0003, 0113 AP gain [-100 to 300], 
-2019_07_30_0004, 0501 opto [-50] (10s sweep), 
-2019_07_30_0005, 0201 memtest, 
-2019_07_30_0006, 0202 IV dual [-110 to -50], 
-2019_07_30_0007, 0501 opto [-50] (10s sweep), 
-2019_07_30_0008, 0201 memtest, 
-2019_07_30_0009, 0501 opto [-50] (10s sweep), 
+ABF: X:\Data\OTR-Cre\VTA inj ChR2 NAc response\abfs\2019_07_30_0000.abf, 0201 memtest, 
+ABF: X:\Data\OTR-Cre\VTA inj ChR2 NAc response\abfs\2019_07_30_0001.abf, 0202 IV dual [-110 to -50], 
+ABF: X:\Data\OTR-Cre\VTA inj ChR2 NAc response\abfs\2019_07_30_0002.abf, 0111 AP ramp, 
+ABF: X:\Data\OTR-Cre\VTA inj ChR2 NAc response\abfs\2019_07_30_0003.abf, 0113 AP gain [-100 to 300], 
+ABF: X:\Data\OTR-Cre\VTA inj ChR2 NAc response\abfs\2019_07_30_0004.abf, 0501 opto [-50] (10s sweep), 
+ABF: X:\Data\OTR-Cre\VTA inj ChR2 NAc response\abfs\2019_07_30_0005.abf, 0201 memtest, 
+ABF: X:\Data\OTR-Cre\VTA inj ChR2 NAc response\abfs\2019_07_30_0006.abf, 0202 IV dual [-110 to -50], 
+ABF: X:\Data\OTR-Cre\VTA inj ChR2 NAc response\abfs\2019_07_30_0007.abf, 0501 opto [-50] (10s sweep), 
+ABF: X:\Data\OTR-Cre\VTA inj ChR2 NAc response\abfs\2019_07_30_0008.abf, 0201 memtest, 
+ABF: X:\Data\OTR-Cre\VTA inj ChR2 NAc response\abfs\2019_07_30_0009.abf, 0501 opto [-50] (10s sweep), 
 GROUP: YF2 
-2019_08_02_0000, 0201 memtest, 
-2019_08_02_0001, 0501 opto [-50] (10s sweep), 
-2019_08_02_0002, 0201 memtest, 
-2019_08_02_0003, 0501 opto [-50] (10s sweep), 
-2019_08_02_0004, 0201 memtest, 
-2019_08_02_0005, 0501 opto [-50] (10s sweep), 
-2019_08_02_0006, 0201 memtest, 
-2019_08_02_0007, 0501 opto [-50] (10s sweep), 
-2019_08_02_0008, 0201 memtest, 
-2019_08_02_0009, 0501 opto [-50] (10s sweep), 
-2019_08_02_0010, 0201 memtest, 
-2019_08_02_0011, 0501 opto [-50] (10s sweep), 
-2019_08_02_0012, 0201 memtest, 
-2019_08_02_0013, 0501 opto [-50] (10s sweep), 
-2019_08_02_0014, 0201 memtest, 
-2019_08_02_0015, 0501 opto [-50] (10s sweep), 
+ABF: X:\Data\OTR-Cre\VTA inj ChR2 NAc response\abfs\2019_08_02_0000.abf, 0201 memtest, 
+ABF: X:\Data\OTR-Cre\VTA inj ChR2 NAc response\abfs\2019_08_02_0001.abf, 0501 opto [-50] (10s sweep), 
+ABF: X:\Data\OTR-Cre\VTA inj ChR2 NAc response\abfs\2019_08_02_0002.abf, 0201 memtest, 
+ABF: X:\Data\OTR-Cre\VTA inj ChR2 NAc response\abfs\2019_08_02_0003.abf, 0501 opto [-50] (10s sweep), 
+ABF: X:\Data\OTR-Cre\VTA inj ChR2 NAc response\abfs\2019_08_02_0004.abf, 0201 memtest, 
+ABF: X:\Data\OTR-Cre\VTA inj ChR2 NAc response\abfs\2019_08_02_0005.abf, 0501 opto [-50] (10s sweep), 
+ABF: X:\Data\OTR-Cre\VTA inj ChR2 NAc response\abfs\2019_08_02_0006.abf, 0201 memtest, 
+ABF: X:\Data\OTR-Cre\VTA inj ChR2 NAc response\abfs\2019_08_02_0007.abf, 0501 opto [-50] (10s sweep), 
+ABF: X:\Data\OTR-Cre\VTA inj ChR2 NAc response\abfs\2019_08_02_0008.abf, 0201 memtest, 
+ABF: X:\Data\OTR-Cre\VTA inj ChR2 NAc response\abfs\2019_08_02_0009.abf, 0501 opto [-50] (10s sweep), 
+ABF: X:\Data\OTR-Cre\VTA inj ChR2 NAc response\abfs\2019_08_02_0010.abf, 0201 memtest, 
+ABF: X:\Data\OTR-Cre\VTA inj ChR2 NAc response\abfs\2019_08_02_0011.abf, 0501 opto [-50] (10s sweep), 
+ABF: X:\Data\OTR-Cre\VTA inj ChR2 NAc response\abfs\2019_08_02_0012.abf, 0201 memtest, 
+ABF: X:\Data\OTR-Cre\VTA inj ChR2 NAc response\abfs\2019_08_02_0013.abf, 0501 opto [-50] (10s sweep), 
+ABF: X:\Data\OTR-Cre\VTA inj ChR2 NAc response\abfs\2019_08_02_0014.abf, 0201 memtest, 
+ABF: X:\Data\OTR-Cre\VTA inj ChR2 NAc response\abfs\2019_08_02_0015.abf, 0501 opto [-50] (10s sweep), 
 GROUP: OM59 
-2019_08_02_0016, 0201 memtest, 
-2019_08_02_0017, 0501 opto [-50] (10s sweep), 
-2019_08_02_0018, 0201 memtest, 
-2019_08_02_0019, 0501 opto [-50] (10s sweep), 
-2019_08_02_0020, 0201 memtest, 
-2019_08_02_0021, 0501 opto [-50] (10s sweep), 
+ABF: X:\Data\OTR-Cre\VTA inj ChR2 NAc response\abfs\2019_08_02_0016.abf, 0201 memtest, 
+ABF: X:\Data\OTR-Cre\VTA inj ChR2 NAc response\abfs\2019_08_02_0017.abf, 0501 opto [-50] (10s sweep), 
+ABF: X:\Data\OTR-Cre\VTA inj ChR2 NAc response\abfs\2019_08_02_0018.abf, 0201 memtest, 
+ABF: X:\Data\OTR-Cre\VTA inj ChR2 NAc response\abfs\2019_08_02_0019.abf, 0501 opto [-50] (10s sweep), 
+ABF: X:\Data\OTR-Cre\VTA inj ChR2 NAc response\abfs\2019_08_02_0020.abf, 0201 memtest, 
+ABF: X:\Data\OTR-Cre\VTA inj ChR2 NAc response\abfs\2019_08_02_0021.abf, 0501 opto [-50] (10s sweep), 
 GROUP: YM2 
-2019_08_05_0000, 0201 memtest, 
-2019_08_05_0001, 0501 opto [-50] (10s sweep), 
-2019_08_05_0002, 0501 opto [-50] (10s sweep), 
-2019_08_05_0003, 0201 memtest, 
-2019_08_05_0004, 0501 opto [-50] (10s sweep), 
-2019_08_05_0005, 0201 memtest, 
-2019_08_05_0006, 0501 opto [-50] (10s sweep), 
-2019_08_05_0007, 0201 memtest, 
-2019_08_05_0008, 0501 opto [-50] (10s sweep), 
-2019_08_05_0009, 0201 memtest, 
-2019_08_05_0010, 0501 opto [-50] (10s sweep), 
-2019_08_05_0011, 0201 memtest, 
-2019_08_05_0012, 0501 opto [-50] (10s sweep), 
-2019_08_05_0013, 0201 memtest, 
-2019_08_05_0014, 0501 opto [-50] (10s sweep), 
-2019_08_05_0015, 0201 memtest, 
-2019_08_05_0016, 0501 opto [-50] (10s sweep), 
-2019_08_05_0017, 0501 opto [-50] (10s sweep), +DNQX+AP5 bath
-2019_08_05_0018, 0202 IV dual [-110 to -50], 
-2019_08_05_0019, 0111 AP ramp, 
-2019_08_05_0020, 0113 AP gain [-100 to 300], 
+ABF: X:\Data\OTR-Cre\VTA inj ChR2 NAc response\abfs\2019_08_05_0000.abf, 0201 memtest, 
+ABF: X:\Data\OTR-Cre\VTA inj ChR2 NAc response\abfs\2019_08_05_0001.abf, 0501 opto [-50] (10s sweep), 
+ABF: X:\Data\OTR-Cre\VTA inj ChR2 NAc response\abfs\2019_08_05_0002.abf, 0501 opto [-50] (10s sweep), 
+ABF: X:\Data\OTR-Cre\VTA inj ChR2 NAc response\abfs\2019_08_05_0003.abf, 0201 memtest, 
+ABF: X:\Data\OTR-Cre\VTA inj ChR2 NAc response\abfs\2019_08_05_0004.abf, 0501 opto [-50] (10s sweep), 
+ABF: X:\Data\OTR-Cre\VTA inj ChR2 NAc response\abfs\2019_08_05_0005.abf, 0201 memtest, 
+ABF: X:\Data\OTR-Cre\VTA inj ChR2 NAc response\abfs\2019_08_05_0006.abf, 0501 opto [-50] (10s sweep), 
+ABF: X:\Data\OTR-Cre\VTA inj ChR2 NAc response\abfs\2019_08_05_0007.abf, 0201 memtest, 
+ABF: X:\Data\OTR-Cre\VTA inj ChR2 NAc response\abfs\2019_08_05_0008.abf, 0501 opto [-50] (10s sweep), 
+ABF: X:\Data\OTR-Cre\VTA inj ChR2 NAc response\abfs\2019_08_05_0009.abf, 0201 memtest, 
+ABF: X:\Data\OTR-Cre\VTA inj ChR2 NAc response\abfs\2019_08_05_0010.abf, 0501 opto [-50] (10s sweep), 
+ABF: X:\Data\OTR-Cre\VTA inj ChR2 NAc response\abfs\2019_08_05_0011.abf, 0201 memtest, 
+ABF: X:\Data\OTR-Cre\VTA inj ChR2 NAc response\abfs\2019_08_05_0012.abf, 0501 opto [-50] (10s sweep), 
+ABF: X:\Data\OTR-Cre\VTA inj ChR2 NAc response\abfs\2019_08_05_0013.abf, 0201 memtest, 
+ABF: X:\Data\OTR-Cre\VTA inj ChR2 NAc response\abfs\2019_08_05_0014.abf, 0501 opto [-50] (10s sweep), 
+ABF: X:\Data\OTR-Cre\VTA inj ChR2 NAc response\abfs\2019_08_05_0015.abf, 0201 memtest, 
+ABF: X:\Data\OTR-Cre\VTA inj ChR2 NAc response\abfs\2019_08_05_0016.abf, 0501 opto [-50] (10s sweep), 
+ABF: X:\Data\OTR-Cre\VTA inj ChR2 NAc response\abfs\2019_08_05_0017.abf, 0501 opto [-50] (10s sweep), +DNQX+AP5 bath
+ABF: X:\Data\OTR-Cre\VTA inj ChR2 NAc response\abfs\2019_08_05_0018.abf, 0202 IV dual [-110 to -50], 
+ABF: X:\Data\OTR-Cre\VTA inj ChR2 NAc response\abfs\2019_08_05_0019.abf, 0111 AP ramp, 
+ABF: X:\Data\OTR-Cre\VTA inj ChR2 NAc response\abfs\2019_08_05_0020.abf, 0113 AP gain [-100 to 300], 
 GROUP: OM60 
-2019_08_05_0021, 0201 memtest, 
-2019_08_05_0022, 0501 opto [-50] (10s sweep), +DNQX+AP5 bath
-2019_08_05_0023, 0202 IV dual [-110 to -50], 
-2019_08_05_0024, 0111 AP ramp, 
-2019_08_05_0025, 0113 AP gain [-100 to 300], 
-2019_08_05_0026, 0201 memtest, 
-2019_08_05_0027, 0501 opto [-50] (10s sweep), 
-2019_08_05_0028, 0201 memtest, 
-2019_08_05_0029, 0501 opto [-50] (10s sweep), 
-2019_08_05_0030, 0201 memtest, 
-2019_08_05_0031, 0501 opto [-50] (10s sweep), 
-2019_08_05_0032, 0201 memtest, 
-2019_08_05_0033, 0501 opto [-50] (10s sweep), 
+ABF: X:\Data\OTR-Cre\VTA inj ChR2 NAc response\abfs\2019_08_05_0021.abf, 0201 memtest, 
+ABF: X:\Data\OTR-Cre\VTA inj ChR2 NAc response\abfs\2019_08_05_0022.abf, 0501 opto [-50] (10s sweep), +DNQX+AP5 bath
+ABF: X:\Data\OTR-Cre\VTA inj ChR2 NAc response\abfs\2019_08_05_0023.abf, 0202 IV dual [-110 to -50], 
+ABF: X:\Data\OTR-Cre\VTA inj ChR2 NAc response\abfs\2019_08_05_0024.abf, 0111 AP ramp, 
+ABF: X:\Data\OTR-Cre\VTA inj ChR2 NAc response\abfs\2019_08_05_0025.abf, 0113 AP gain [-100 to 300], 
+ABF: X:\Data\OTR-Cre\VTA inj ChR2 NAc response\abfs\2019_08_05_0026.abf, 0201 memtest, 
+ABF: X:\Data\OTR-Cre\VTA inj ChR2 NAc response\abfs\2019_08_05_0027.abf, 0501 opto [-50] (10s sweep), 
+ABF: X:\Data\OTR-Cre\VTA inj ChR2 NAc response\abfs\2019_08_05_0028.abf, 0201 memtest, 
+ABF: X:\Data\OTR-Cre\VTA inj ChR2 NAc response\abfs\2019_08_05_0029.abf, 0501 opto [-50] (10s sweep), 
+ABF: X:\Data\OTR-Cre\VTA inj ChR2 NAc response\abfs\2019_08_05_0030.abf, 0201 memtest, 
+ABF: X:\Data\OTR-Cre\VTA inj ChR2 NAc response\abfs\2019_08_05_0031.abf, 0501 opto [-50] (10s sweep), 
+ABF: X:\Data\OTR-Cre\VTA inj ChR2 NAc response\abfs\2019_08_05_0032.abf, 0201 memtest, 
+ABF: X:\Data\OTR-Cre\VTA inj ChR2 NAc response\abfs\2019_08_05_0033.abf, 0501 opto [-50] (10s sweep), 
 </pre></div></div>
 </body>
 </html>
