@@ -46,7 +46,8 @@ class ExperimentNotes:
             print("folder does not exist:", self.backupFolder)
 
     def write(self, text):
-        self._backup()
+        if os.path.exists(self.path):
+            self._backup()
         assert isinstance(text, str)
         text = text.replace("\r", "")
         with open(self.path, 'w') as f:
