@@ -17,6 +17,9 @@ def copyButton(label, text):
     html += f"<button class='smallButton' onclick=\"copyToClipboard('{id}')\">{label}</button> "
     return html
 
+def ignoreButton(localPath):
+    html = f"<button class='smallButton' onclick=\"ignoreAbf('{os.path.basename(localPath)}')\">ignore</button> "
+    return html
 
 def refreshButton():
     html = "<FORM style='display: inline;'>"
@@ -65,6 +68,12 @@ def htmlPageWrap(htmlContent):
 			}
 		}
 	}
+
+    function ignoreAbf(baseName){
+        if (confirm(`Are you sure you want to ignore ${baseName}?`) == true) {
+            window.location.href = "?ignoreABF=" + baseName;
+        }
+    }
 </script>
 
 </head>

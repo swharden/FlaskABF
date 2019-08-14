@@ -74,6 +74,7 @@ def showAbfParent(pathUrl):
       - also deletes graphs for child ABFs
       - also marks ABFs as ignored
       - also analyzes new ABFs
+      - also marks ABFs as ignored
     """
     showRequest(pathUrl, request)
     pathLocal = abfBrowse.getLocalPath(pathUrl)
@@ -93,6 +94,12 @@ def showAbfParent(pathUrl):
             abfFldr = abfBrowse.AbfFolder(os.path.dirname(pathLocal))
             abfFldr.deleteChildGraphs(os.path.basename(pathLocal))
             print("complete.")
+
+        if ('ignoreAbf' in request.args.keys()):
+            ignoreAbf = request.args['ignoreAbf']
+            ignoreAbfPath = os.path.join(os.path.dirname(pathLocal), ignoreAbf)
+            print(f"ignoring ABF: {ignoreAbfPath}")
+            os.rename(ignoreAbfPath, ignoreAbfPath+".ignored")
 
         return abfBrowse.pages.parent.generateHtml(pathLocal)
     else:

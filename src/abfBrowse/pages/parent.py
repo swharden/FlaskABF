@@ -122,8 +122,9 @@ def pageParentChildAbfList(abfFolder, parentNote):
         html += f"<div class='abfInfoRow'>{abfFileName} "
         xDrivePath = abfBrowse.getXdrivePath(abfPaths[i])
         html += abfBrowse.htmlTools.copyButton("copy path", xDrivePath)
-        html += abfBrowse.htmlTools.copyButton(
-            "setpath", "setpath \"%s\"; " % (xDrivePath))
+        setpathCommand = "setpath \"%s\"; " % (xDrivePath)
+        html += abfBrowse.htmlTools.copyButton("setpath", setpathCommand)
+        html += abfBrowse.htmlTools.ignoreButton(abfPaths[i])
         html += f"{abf.protocol}, {clampType} with {sweepCount} sweeps ({abf.sweepLengthSec} sec each, {duration} total)"
 
         # display messages at the end of the line
