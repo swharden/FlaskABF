@@ -28,10 +28,16 @@ modify:
 """
 
 def getDataLine(abfFilePath):
-    abf = pyabf.ABF(abfFilePath, loadData=False)
-    comments = " | ".join(abf.tagComments)
-    abfPath = abfBrowse.getXdrivePath(abfFilePath)
-    return f"ABF: {abfPath}, {abf.protocol}, {comments}"
+    dataLine = ""
+    try:
+        abf = pyabf.ABF(abfFilePath, loadData=False)
+        comments = " | ".join(abf.tagComments)
+        abfPath = abfBrowse.getXdrivePath(abfFilePath)
+        dataLine = f"ABF: {abfPath}, {abf.protocol}, {comments}"
+        dataLine += "\n"
+    except Exception as ex:
+        print(f"### EXCEPTION: {ex}")
+    return dataLine
 
 
 def getJavaBlock(abfFolder):
@@ -50,12 +56,12 @@ def getJavaBlock(abfFolder):
             html += f"GROUP: {line} \n"
         if isinstance(line, abfBrowse.cellsFile.CellNote):
             for childID in fam[line.abfID]:
-                html += getDataLine(f"{abfFolder.path}/{childID}.abf") + "\n"
+                html += getDataLine(f"{abfFolder.path}/{childID}.abf")
 
     if len(unknownCells):
         html += f"GROUP: UNKNOWN \n"
         for childID in unknownCells:
-            html += getDataLine(f"{abfFolder.path}/{childID}.abf") + "\n"
+            html += getDataLine(f"{abfFolder.path}/{childID}.abf")
 
     html = f"<div style='color: #AAA; background-color: #EEE; padding: 10px; margin: 10px;' id='cellListBlock'><pre id='cellList'>{html}</pre></div>"
     return html
