@@ -95,8 +95,8 @@ def showAbfParent(pathUrl):
             abfFldr.deleteChildGraphs(os.path.basename(pathLocal))
             print("complete.")
 
-        if ('ignoreAbf' in request.args.keys()):
-            ignoreAbf = request.args['ignoreAbf']
+        if ('ignoreABF' in request.args.keys()):
+            ignoreAbf = request.args['ignoreABF']
             ignoreAbfPath = os.path.join(os.path.dirname(pathLocal), ignoreAbf)
             print(f"ignoring ABF: {ignoreAbfPath}")
             os.rename(ignoreAbfPath, ignoreAbfPath+".ignored")
