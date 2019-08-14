@@ -57,26 +57,26 @@ def runAllTests(launchBrowser = True):
 
     print("ALL TESTS PASSED")
 
-def test_makepage_parent(parentAbfPath, launchBrowser = True):
+def test_makepage_parent(parentAbfPath, launchBrowser = False):
     testMenu(os.path.dirname(parentAbfPath))
     testParent(parentAbfPath)
     if launchBrowser:
         os.system(PATH_HERE+"/testFrames.html")
 
-def test_makepage_experiment(parentAbfPath, launchBrowser = True):
+def test_makepage_experiment(parentAbfPath, launchBrowser = False):
     testExperiment(os.path.dirname(parentAbfPath))
     os.system(PATH_HERE+"/testExperiment.html")
 
-def test_makepage_origin(parentAbfPath, launchBrowser = True):
+def test_makepage_origin(parentAbfPath, launchBrowser = False):
     testOrigin(parentAbfPath)
     if launchBrowser:
         os.system(PATH_HERE+"/testOrigin.html")
 
 if __name__ == "__main__":
 
-    test_makepage_origin(R"X:\Data\OTR-Cre\VTA inj ChR2 NAc response\abfs", False)
+    #test_makepage_origin(R"X:\Data\OTR-Cre\VTA inj ChR2 NAc response\abfs", False)
 
-    #test_makepage_parent(R"X:\Data\GLP-eYFP\round 2 - ChR2 in nodose\abfs\19517000.abf")
+    test_makepage_parent(R"X:\Data\GLP-eYFP\round 2 - ChR2 in nodose\abfs\19517000.abf")
     
     #test_makepage_experiment(R"X:\Data\GLP-eYFP\round 2 - ChR2 in nodose\abfs")
 
