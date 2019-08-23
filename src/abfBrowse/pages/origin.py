@@ -55,8 +55,9 @@ def getJavaBlock(abfFolder):
         if isinstance(line, str):
             html += f"GROUP: {line} \n"
         if isinstance(line, abfBrowse.cellsFile.CellNote):
-            for childID in fam[line.abfID]:
-                html += getDataLine(f"{abfFolder.path}/{childID}.abf")
+            if line.abfID in fam.keys():
+                for childID in fam[line.abfID]:
+                    html += getDataLine(f"{abfFolder.path}/{childID}.abf")
 
     if len(unknownCells):
         html += f"GROUP: UNKNOWN \n"
