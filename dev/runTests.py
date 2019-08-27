@@ -74,6 +74,7 @@ def test_makepage_origin(parentAbfPath, launchBrowser = False):
 
 if __name__ == "__main__":
 
+    #test_makepage_origin(R"X:\Data\F344\Aging BLA\basal excitability round2\abfs", False)
     test_makepage_origin(R"X:\Data\F344\Aging BLA\basal excitability round3\abfs-intrinsics", False)
 
     #test_makepage_parent(R"X:\Data\GLP-eYFP\round 2 - ChR2 in nodose\abfs\19517000.abf")
