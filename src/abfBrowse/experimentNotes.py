@@ -2,6 +2,7 @@ import os
 import shutil
 import time
 import datetime
+import abfBrowse
 
 class ExperimentNotes:
     def __init__(self, abfFolderPath):
@@ -9,7 +10,7 @@ class ExperimentNotes:
         self.abfFolderPath = os.path.abspath(abfFolderPath)
         assert os.path.exists(self.abfFolderPath)
         self.path = os.path.join(self.abfFolderPath, "experiment.txt")
-        self.backupFolder = os.path.join(self.abfFolderPath, "swhlab")
+        self.backupFolder = os.path.join(self.abfFolderPath, abfBrowse.AUTOANALYSIS_FOLDER_NAME)
     
     def getEditDateString(self):
         if os.path.exists(self.path):

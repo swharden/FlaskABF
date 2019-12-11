@@ -87,7 +87,7 @@ def showAbfParent(pathUrl):
                 request.form['abfID'],
                 request.form['colorCode'],
                 request.form['comment'],
-                "swhlab")
+                abfBrowse.AUTOANALYSIS_FOLDER_NAME)
 
         if ('deleteGraphsForChildren' in request.args.keys()):
             print("Deleting graphs for children...")

@@ -15,6 +15,8 @@ import abfBrowse.pages.origin
 
 import os
 
+AUTOANALYSIS_FOLDER_NAME = "swhlab"
+
 ###############################################################################################
 
 # TODO: move all this stuff to a module

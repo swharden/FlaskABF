@@ -81,7 +81,7 @@ class AbfFolder:
             self.fileNames.remove("Thumbs.db")
 
     def _scanAnalysisFolder(self):
-        self.analysisFolder = os.path.join(self.path, "swhlab")
+        self.analysisFolder = os.path.join(self.path, abfBrowse.AUTOANALYSIS_FOLDER_NAME)
         if os.path.isdir(self.analysisFolder):
             self.analysisFiles = sorted(os.listdir(self.analysisFolder))
             if "Thumbs.db" in self.analysisFiles:
