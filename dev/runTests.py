@@ -72,10 +72,22 @@ def test_makepage_origin(parentAbfPath, launchBrowser = False):
     if launchBrowser:
         os.system(PATH_HERE+"/testOrigin.html")
 
+def test_json_abfFolder(folderPath):
+    print(f"creating JSON for abf folder: {folderPath}")
+    abfFolder = abfBrowse.AbfFolder(folderPath)
+    print()
+    print(abfFolder.toJSON())
+    #filePathOut = os.path.abspath(PATH_HERE + "/testProject.json")
+    #with open(os.path.abspath(filePathOut), 'w') as f:
+        #f.write(html)
+    #print(f"wrote: {filePathOut}")
+
 if __name__ == "__main__":
 
+    test_json_abfFolder(R"X:\Data\F344\Aging BLA\basal excitability round2\abfs")
+
     #test_makepage_origin(R"X:\Data\F344\Aging BLA\basal excitability round2\abfs", False)
-    test_makepage_origin(R"X:\Data\F344\Aging BLA\basal excitability round3\abfs-intrinsics", False)
+    #test_makepage_origin(R"X:\Data\F344\Aging BLA\basal excitability round3\abfs-intrinsics", False)
 
     #test_makepage_parent(R"X:\Data\GLP-eYFP\round 2 - ChR2 in nodose\abfs\19517000.abf")
     
