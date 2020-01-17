@@ -6,6 +6,7 @@ This aids in grouping ABFs and data images into clusteres by parent.
 import abfBrowse
 import os
 import glob
+import json
 
 
 class AbfList:
@@ -81,7 +82,8 @@ class AbfFolder:
             self.fileNames.remove("Thumbs.db")
 
     def _scanAnalysisFolder(self):
-        self.analysisFolder = os.path.join(self.path, abfBrowse.AUTOANALYSIS_FOLDER_NAME)
+        self.analysisFolder = os.path.join(
+            self.path, abfBrowse.AUTOANALYSIS_FOLDER_NAME)
         if os.path.isdir(self.analysisFolder):
             self.analysisFiles = sorted(os.listdir(self.analysisFolder))
             if "Thumbs.db" in self.analysisFiles:
@@ -159,3 +161,18 @@ class AbfFolder:
 
         if len(tifsNeedingConversion):
             self._scanAnalysisFolder()
+
+    def toJSON(self):
+        data = {}
+        data["path"] = self.path
+
+        parents = {}
+        for parent in self.abfList.family.keys():
+            parentInfo = {}
+            parentInfo["color"] = "blue"
+            parentInfo["comment"] = "asdfasdf"
+            parentInfo["children"] = 123
+            parents[parent] = parentInfo
+        data["parents"] = parents
+
+        return json.dumps(data)
