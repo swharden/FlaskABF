@@ -132,6 +132,8 @@ def pageParentChildAbfList(abfFolder, parentNote):
             html += f", <span class='abfInfoComment'>Comments: {commentsLine}</span>"
         if i == 0 and not isMemTest:
             html += f" <span class='abfInfoWarning'>WARNING: the parent ABF should be a memtest!</span>"
+        if (abf.adcUnits[0] == abf.dacUnits[0]):
+            html += f" <span class='abfInfoWarning'>WARNING: unit error!</span>"
 
         html += "</div>"
 
