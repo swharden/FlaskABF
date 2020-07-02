@@ -76,8 +76,8 @@ def pageFolderActions(abfFolder, parentNote):
         if abfFolder.path in commandText:
             html += "this folder is in the auto-analysis list | "
         else:
-            html += f"<!--<a href='{urlAnalyze}' class='abfAnalysisNeeded'>auto-analyze this folder</a> | -->"
-            html += f"<span class='abfAnalysisNeeded'>Auto-analysis disabled (COVID-19). Analyze with pyABFauto.</span> | "
+            html += f"<a href='{urlAnalyze}' class='abfAnalysisNeeded'>auto-analyze this folder</a> | "
+            #html += f"<span class='abfAnalysisNeeded'>Auto-analysis disabled (COVID-19). Analyze with pyABFauto.</span> | "
     else:
         html += f"<a href='{urlAnalyze}' style='color: gray;'>No ABFs require analysis</a> | "
 
